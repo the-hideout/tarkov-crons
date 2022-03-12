@@ -12,8 +12,8 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 
 |  Name  |  Cron  |  Status  |
 |---|---|---|
-| check-scans | `20 * * * *`  | TODO |
-| update-cache  | `*/5 * * * *`  | TODO |
+| check-scans | `20 * * * *`  | [![check-scans](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml) |
+| update-cache  | `*/5 * * * *`  | [![update-cache](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-cache.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-cache.yml) |
 | update-reset-timers  | `*/5 * * * *`  | TODO |
 | update-barters |`*/5 * * * *` | TODO |
 | update-crafts | `1-59/5 * * * *` | TODO |
