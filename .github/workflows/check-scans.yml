@@ -1,0 +1,22 @@
+name: check-scans
+
+on:
+  push:
+      branches: [ main ]
+  schedule:
+    - cron: "20 * * * *"
+
+jobs:
+  check-scans:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: check-scans
+        run: docker-compose up --build
+        env:
+          TARKOV_CRON: check-scans
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+          MYSQL_USERNAME: ${{ secrets.PSCALE_USER }}
+          MYSQL_PASSWORD: ${{ secrets.PSCALE_PASS }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
