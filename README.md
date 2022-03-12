@@ -25,8 +25,8 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 | update-item-properties | `15 * * * *` | [![update-item-properties](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-item-properties.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-item-properties.yml) |
 | update-trader-prices | `45 * * * *` | [![update-trader-prices](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-trader-prices.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-trader-prices.yml) |
 | update-currency-prices | `0 3,15 * * *` | [![update-currency-prices](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-currency-prices.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-currency-prices.yml) |
-| clear-checkouts | `5 */6 * * *` | TODO |
-| verify-wiki | `5 9 * * *` | TODO |
+| clear-checkouts | `5 */6 * * *` | [![clear-checkouts](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml) |
+| verify-wiki | `5 9 * * *` | [![verify-wiki](https://github.com/the-hideout/tarkov-crons/actions/workflows/verify-wiki.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/verify-wiki.yml) |
 
 ## Example 📸
 
