@@ -1,8 +1,10 @@
 name: update-hideout
 
 on:
+  push:
+      branches: [ main ]
   schedule:
-    - cron: "* * * * *"
+    - cron: "*/5 * * * *"
 
 jobs:
   scheduled-job:
