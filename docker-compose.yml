@@ -4,6 +4,15 @@ services:
   tarkov-cron:
     container_name: tarkov-cron
     build: .
-    env_file: 
-      - ./.env
-    command: "update-hideout"
+    environment:
+      NODE_ENV: production
+      CLOUDFLARE_TOKEN: ${CLOUDFLARE_TOKEN}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      BSG_BASE_PRICE_URL: https://dev.sp-tarkov.com/SPT-AKI/Server/raw/commit/1e8d748bd7b3d20514ed53d513c4d376389a190c/project/assets/database/templates/prices.json
+      BSG_DATA_URL: https://dev.sp-tarkov.com/SPT-AKI/Server/raw/commit/1e8d748bd7b3d20514ed53d513c4d376389a190c/project/assets/database/templates/items.json
+      BSG_TRANSLATIONS_URL: https://dev.sp-tarkov.com/SPT-AKI/Server/raw/commit/1e8d748bd7b3d20514ed53d513c4d376389a190c/project/assets/database/locales/global/en.json
+
+    command: "${TARKOV_CRON}"
