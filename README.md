@@ -14,7 +14,7 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 |---|---|---|
 | check-scans | `20 * * * *`  | [![check-scans](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml) |
 | update-cache  | `*/5 * * * *`  | [![update-cache](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-cache.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-cache.yml) |
-| update-reset-timers  | `*/5 * * * *`  | TODO |
+| update-reset-timers  | `*/5 * * * *`  | [![update-reset-timers](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-reset-timers.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-reset-timers.yml) |
 | update-barters |`*/5 * * * *` | TODO |
 | update-crafts | `1-59/5 * * * *` | TODO |
 | update-hideout | `2-59/5 * * * *` | [![update-hideout](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml) |
