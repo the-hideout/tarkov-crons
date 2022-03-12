@@ -7,7 +7,7 @@ on:
     - cron: "*/5 * * * *"
 
 jobs:
-  scheduled-job:
+  update-hideout:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
