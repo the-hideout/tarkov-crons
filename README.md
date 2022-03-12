@@ -67,7 +67,16 @@ Setup:
 
 - Install [Docker](https://docs.docker.com/get-docker/)
 - Install [docker-compose](https://docs.docker.com/compose/install/)
-- Add the necessary secrets to your `.env` file
+
+Run the following commands in a bash terminal to setup your environment variables correctly:
+
+```bash
+export CLOUDFLARE_TOKEN=<token>
+export PSCALE_USER=<planetscale-username>
+export PSCALE_PASS=<planetscale-password>
+export AWS_ACCESS_KEY_ID=<aws-access-key-id>
+export AWS_SECRET_ACCESS_KEY=<aws-secret-access-key>
+```
 
 Run:
 
