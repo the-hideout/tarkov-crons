@@ -19,7 +19,7 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 | update-crafts | `*/5 * * * *` | [![update-crafts](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-crafts.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-crafts.yml) |
 | update-hideout | `*/5 * * * *` | [![update-hideout](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml) |
 | update-quests | `*/5 * * * *` | [![update-quests](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-quests.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-quests.yml) |
-| update-existing-bases | `*/5 * * * *` | TODO |
+| update-existing-bases | `*/5 * * * *` | [![update-existing-bases](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-existing-bases.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-existing-bases.yml) |
 | game-data | `*/5 * * * *` | [![game-data](https://github.com/the-hideout/tarkov-crons/actions/workflows/game-data.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/game-data.yml) |
 | update-historical-prices | `*/5 * * * *` | TODO |
 | update-item-properties | `15 * * * *` | TODO |
