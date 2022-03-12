@@ -47,9 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: <cron-name>
-        run: |
-          docker-compose up --build
-          [ $? -eq 0 ] && exit 0 || exit 1
+        run: docker-compose up --build --exit-code-from tarkov-cron
         env:
           TARKOV_CRON: <cron-name> # the name of the script in the ./jobs folder to run
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
