@@ -18,7 +18,7 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 | update-barters |`*/5 * * * *` | [![update-barters](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-barters.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-barters.yml) |
 | update-crafts | `*/5 * * * *` | [![update-crafts](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-crafts.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-crafts.yml) |
 | update-hideout | `*/5 * * * *` | [![update-hideout](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml) |
-| update-quests | `*/5 * * * *` | TODO |
+| update-quests | `*/5 * * * *` | [![update-quests](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-quests.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-quests.yml) |
 | update-existing-bases | `*/5 * * * *` | TODO |
 | game-data | `*/5 * * * *` | TODO |
 | update-historical-prices | `*/5 * * * *` | TODO |
