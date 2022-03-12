@@ -89,4 +89,8 @@ module.exports = async () => {
     }
     fs.writeFileSync(path.join(__dirname, '..', 'dumps', 'historical-prices.json'), JSON.stringify(cloudflareData, null, 4));
     console.log('Done with historical prices');
+
+    // Possibility to POST to a Discord webhook here with cron status details
+    console.log(`Process completed`);
+    process.exit(0);
 };
