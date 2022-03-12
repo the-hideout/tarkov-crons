@@ -1,0 +1,22 @@
+name: update-item-properties
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "15 * * * *"
+
+jobs:
+  update-item-properties:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: update-item-properties
+        run: docker-compose up --build --exit-code-from tarkov-cron
+        env:
+          TARKOV_CRON: update-item-properties
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+          MYSQL_USERNAME: ${{ secrets.PSCALE_USER }}
+          MYSQL_PASSWORD: ${{ secrets.PSCALE_PASS }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
