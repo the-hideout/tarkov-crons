@@ -10,21 +10,23 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 
 ## Schedules 📆
 
-- check-scans: `20 * * * *`
-- update-cache: `*/5 * * * *`
-- update-reset-timers: `*/5 * * * *`
-- update-barters: `*/5 * * * *`
-- update-crafts: `1-59/5 * * * *`
-- update-hideout: `2-59/5 * * * *`
-- update-quests: `3-59/5 * * * *`
-- update-existing-bases: `4-59/5 * * * *`
-- game-data: `*/5 * * * *`
-- update-historical-prices: `5-59/15 * * * *`
-- update-item-properties: `15 * * * *`
-- update-trader-prices: `45 * * * *`
-- update-currency-prices: `0 3,15 * * *`
-- clear-checkouts: `5 */6 * * *`
-- verify-wiki: `5 9 * * *`
+|  Name  |  Cron  |  Status  |
+|---|---|---|
+| check-scans | `20 * * * *`  | TODO |
+| update-cache  | `*/5 * * * *`  | TODO |
+| update-reset-timers  | `*/5 * * * *`  | TODO |
+| update-barters |`*/5 * * * *` | TODO |
+| update-crafts | `1-59/5 * * * *` | TODO |
+| update-hideout | `2-59/5 * * * *` | [![update-hideout](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml) |
+| update-quests | `3-59/5 * * * *` | TODO |
+| update-existing-bases | `4-59/5 * * * *` | TODO |
+| game-data | `*/5 * * * *` | TODO |
+| update-historical-prices | `5-59/15 * * * *` | TODO |
+| update-item-properties | `15 * * * *` | TODO |
+| update-trader-prices | `45 * * * *` | TODO |
+| update-currency-prices | `0 3,15 * * *` | TODO |
+| clear-checkouts | `5 */6 * * *` | TODO |
+| verify-wiki | `5 9 * * *` | TODO |
 
 ## Example 📸
 
