@@ -141,4 +141,6 @@ module.exports = async () => {
     });
 
     console.log(`${missing} items still missing a valid wiki link`);
+    console.log(`Process completed`);
+    process.exit(0);
 };
