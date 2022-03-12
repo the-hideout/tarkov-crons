@@ -56,3 +56,27 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
+
+## Local Testing 🧪
+
+To test locally, it is highly suggested to use Docker (and docker-compose) as this is what runs in CI with GitHub Actions
+
+Setup:
+
+- Install [Docker](https://docs.docker.com/get-docker/)
+- Install [docker-compose](https://docs.docker.com/compose/install/)
+- Add the necessary secrets to your `.env` file
+
+Run:
+
+```bash
+TARKOV_CRON=update-hideout docker-compose up --build
+```
+
+The syntax of the command above can be explained as follows:
+
+```bash
+TARKOV_CRON=<cron-command-to-run> docker-compose up --build
+```
+
+> Where `<cron-command-to-run>` is the name of a script in the `./jobs` folder
