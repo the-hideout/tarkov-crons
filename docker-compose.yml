@@ -11,8 +11,8 @@ services:
       MYSQL_PASSWORD: ${PSCALE_PASS}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      BSG_BASE_PRICE_URL: https://dev.sp-tarkov.com/SPT-AKI/Server/raw/commit/1e8d748bd7b3d20514ed53d513c4d376389a190c/project/assets/database/templates/prices.json
-      BSG_DATA_URL: https://dev.sp-tarkov.com/SPT-AKI/Server/raw/commit/1e8d748bd7b3d20514ed53d513c4d376389a190c/project/assets/database/templates/items.json
-      BSG_TRANSLATIONS_URL: https://dev.sp-tarkov.com/SPT-AKI/Server/raw/commit/1e8d748bd7b3d20514ed53d513c4d376389a190c/project/assets/database/locales/global/en.json
+      BSG_BASE_PRICE_URL: https://gist.githubusercontent.com/austinhodak/e5ba6130583fe07a890c1e70d55b776c/raw/ad6e370b7ae26a5a14a73fbf2f95c170890b64bf/base_prices.json
+      BSG_DATA_URL: https://gist.githubusercontent.com/austinhodak/e5ba6130583fe07a890c1e70d55b776c/raw/ad6e370b7ae26a5a14a73fbf2f95c170890b64bf/item_data.json
+      BSG_TRANSLATIONS_URL: https://gist.githubusercontent.com/austinhodak/e5ba6130583fe07a890c1e70d55b776c/raw/ad6e370b7ae26a5a14a73fbf2f95c170890b64bf/translations.json
 
     command: "${TARKOV_CRON}"
