@@ -2,7 +2,7 @@ name: check-scans
 
 on:
   push:
-      branches: [ main ]
+    branches: [main]
   schedule:
     - cron: "20 * * * *"
 

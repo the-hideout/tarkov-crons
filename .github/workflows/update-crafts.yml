@@ -1,4 +1,4 @@
-name: update-hideout
+name: update-crafts
 
 on:
   push:
@@ -7,14 +7,14 @@ on:
     - cron: "*/5 * * * *"
 
 jobs:
-  update-hideout:
+  update-crafts:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: update-hideout
+      - name: update-crafts
         run: docker-compose up --build --exit-code-from tarkov-cron
         env:
-          TARKOV_CRON: update-hideout
+          TARKOV_CRON: update-crafts
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
           MYSQL_USERNAME: ${{ secrets.PSCALE_USER }}
           MYSQL_PASSWORD: ${{ secrets.PSCALE_PASS }}

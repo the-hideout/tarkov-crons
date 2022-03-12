@@ -15,13 +15,13 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 | check-scans | `20 * * * *`  | [![check-scans](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml) |
 | update-cache  | `*/5 * * * *`  | [![update-cache](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-cache.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-cache.yml) |
 | update-reset-timers  | `*/5 * * * *`  | [![update-reset-timers](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-reset-timers.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-reset-timers.yml) |
-| update-barters |`*/5 * * * *` | TODO |
-| update-crafts | `1-59/5 * * * *` | TODO |
-| update-hideout | `2-59/5 * * * *` | [![update-hideout](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml) |
-| update-quests | `3-59/5 * * * *` | TODO |
-| update-existing-bases | `4-59/5 * * * *` | TODO |
+| update-barters |`*/5 * * * *` | [![update-barters](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-barters.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-barters.yml) |
+| update-crafts | `*/5 * * * *` | [![update-crafts](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-crafts.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-crafts.yml) |
+| update-hideout | `*/5 * * * *` | [![update-hideout](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml) |
+| update-quests | `*/5 * * * *` | TODO |
+| update-existing-bases | `*/5 * * * *` | TODO |
 | game-data | `*/5 * * * *` | TODO |
-| update-historical-prices | `5-59/15 * * * *` | TODO |
+| update-historical-prices | `*/5 * * * *` | TODO |
 | update-item-properties | `15 * * * *` | TODO |
 | update-trader-prices | `45 * * * *` | TODO |
 | update-currency-prices | `0 3,15 * * *` | TODO |
@@ -37,7 +37,7 @@ name: <cron-name>
 
 on:
   push:
-      branches: [ main ] # Run the job on commits to main
+    branches: [main] # Run the job on commits to main
   schedule:
     - cron: "*/5 * * * *" # Every 5 minutes is the quickest GitHub supports
 
