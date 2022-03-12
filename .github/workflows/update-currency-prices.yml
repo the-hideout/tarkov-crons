@@ -3,8 +3,8 @@ name: update-currency-prices
 on:
   push:
     branches: [main]
-  # schedule:
-  #   - cron: "0 3,15 * * *"
+  schedule:
+    - cron: "0 3,15 * * *"
 
 jobs:
   update-currency-prices:
