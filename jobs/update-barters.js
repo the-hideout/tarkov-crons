@@ -276,4 +276,8 @@ module.exports = async function() {
     fs.writeFileSync(path.join(__dirname, '..', 'dumps', 'barters.json'), JSON.stringify(trades, null, 4));
 
     console.log('Barters updated');
+
+    // Possibility to POST to a Discord webhook here with cron status details
+    console.log(`Process completed`);
+    process.exit(0);
 };
