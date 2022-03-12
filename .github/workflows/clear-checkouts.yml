@@ -1,7 +1,6 @@
 name: clear-checkouts
 
 on:
-  # disabled for now
   push:
     branches: [main]
   # schedule:
