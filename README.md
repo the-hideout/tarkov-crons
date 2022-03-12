@@ -21,7 +21,7 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 | update-quests | `*/5 * * * *` | [![update-quests](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-quests.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-quests.yml) |
 | update-existing-bases | `*/5 * * * *` | [![update-existing-bases](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-existing-bases.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-existing-bases.yml) |
 | game-data | `*/5 * * * *` | [![game-data](https://github.com/the-hideout/tarkov-crons/actions/workflows/game-data.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/game-data.yml) |
-| update-historical-prices | `*/5 * * * *` | TODO |
+| update-historical-prices | `*/5 * * * *` | [![update-historical-prices](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-historical-prices.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-historical-prices.yml) |
 | update-item-properties | `15 * * * *` | TODO |
 | update-trader-prices | `45 * * * *` | TODO |
 | update-currency-prices | `0 3,15 * * *` | TODO |
