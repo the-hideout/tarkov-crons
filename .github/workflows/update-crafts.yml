@@ -16,7 +16,7 @@ jobs:
         env:
           TARKOV_CRON: update-crafts
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
-          MYSQL_USERNAME: ${{ secrets.PSCALE_USER }}
-          MYSQL_PASSWORD: ${{ secrets.PSCALE_PASS }}
+          PSCALE_USER: ${{ secrets.PSCALE_USER }}
+          PSCALE_PASS: ${{ secrets.PSCALE_PASS }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
