@@ -1,5 +1,5 @@
 {
-  "name": "tarkov-data-manager",
+  "name": "tarkov-crons",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

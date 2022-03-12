@@ -10,4 +10,4 @@ RUN npm install
 
 USER node
 
-CMD [ "npm", "run", "start" ]
+ENTRYPOINT [ "npm", "run", "job" ]

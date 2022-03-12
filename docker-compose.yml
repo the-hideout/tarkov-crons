@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  tarkov-cron:
+    container_name: tarkov-cron
+    build: .
+    env_file: 
+      - ./.env
+    command: "update-hideout"
