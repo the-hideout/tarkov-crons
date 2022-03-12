@@ -23,7 +23,7 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 | game-data | `*/5 * * * *` | [![game-data](https://github.com/the-hideout/tarkov-crons/actions/workflows/game-data.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/game-data.yml) |
 | update-historical-prices | `*/5 * * * *` | [![update-historical-prices](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-historical-prices.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-historical-prices.yml) |
 | update-item-properties | `15 * * * *` | [![update-item-properties](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-item-properties.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-item-properties.yml) |
-| update-trader-prices | `45 * * * *` | TODO |
+| update-trader-prices | `45 * * * *` | [![update-trader-prices](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-trader-prices.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-trader-prices.yml) |
 | update-currency-prices | `0 3,15 * * *` | TODO |
 | clear-checkouts | `5 */6 * * *` | TODO |
 | verify-wiki | `5 9 * * *` | TODO |
