@@ -242,4 +242,8 @@ module.exports = async () => {
     spinner.succeed('Done with all item property updates')
 
     spinner.stop();
+    
+    // Possibility to POST to a Discord webhook here with cron status details
+    console.log(`Process completed`);
+    process.exit(0);
 };
