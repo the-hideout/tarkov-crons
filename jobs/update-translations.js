@@ -51,7 +51,7 @@ module.exports = async () => {
                 const oldKey = normalizeName(allTTItems[item._id][insertKey.toLowerCase()]);
                 const newKey = normalizeName(item._props[insertKey].toString().trim());
 
-                if(oldKey !== newKey && validDestinations.includes(newKey)){
+                if(oldKey !== newKey && currentDestinations.includes(newKey)){
                     try {
                         await new Promise((resolve, reject) => {
                             connection.query(`INSERT INTO
