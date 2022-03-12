@@ -140,6 +140,7 @@ module.exports = async () => {
         });
     });
 
+    // Possibility to POST to a Discord webhook here with cron status details
     console.log(`${missing} items still missing a valid wiki link`);
     console.log(`Process completed`);
     process.exit(0);
