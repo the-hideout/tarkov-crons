@@ -7,8 +7,8 @@ services:
     environment:
       NODE_ENV: production
       CLOUDFLARE_TOKEN: ${CLOUDFLARE_TOKEN}
-      MYSQL_USERNAME: ${MYSQL_USERNAME}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USERNAME: ${PSCALE_USER}
+      MYSQL_PASSWORD: ${PSCALE_PASS}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       BSG_BASE_PRICE_URL: https://dev.sp-tarkov.com/SPT-AKI/Server/raw/commit/1e8d748bd7b3d20514ed53d513c4d376389a190c/project/assets/database/templates/prices.json
