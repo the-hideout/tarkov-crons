@@ -2,10 +2,10 @@ name: check-scans
 
 on:
   # disabled for now
-  # push:
-  #   branches: [main]
-  schedule:
-    - cron: "20 * * * *"
+  push:
+    branches: [main]
+  # schedule:
+  #   - cron: "20 * * * *"
 
 jobs:
   check-scans:
