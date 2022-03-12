@@ -7,8 +7,10 @@ services:
     environment:
       NODE_ENV: production
       CLOUDFLARE_TOKEN: ${CLOUDFLARE_TOKEN}
-      MYSQL_USERNAME: ${PSCALE_USER}
-      MYSQL_PASSWORD: ${PSCALE_PASS}
+      PSCALE_USER: ${PSCALE_USER}
+      PSCALE_PASS: ${PSCALE_PASS}
+      DATABASE_NAME: tarkov
+      DATABASE_HOST: 6hvetf6kcr04.us-east-1.psdb.cloud
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       BSG_BASE_PRICE_URL: https://gist.githubusercontent.com/austinhodak/e5ba6130583fe07a890c1e70d55b776c/raw/ad6e370b7ae26a5a14a73fbf2f95c170890b64bf/base_prices.json
