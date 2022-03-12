@@ -247,6 +247,10 @@ module.exports = async () => {
             continue;
         }
 
+        if (item.name === "Roubles") {
+            continue;
+        }
+
         spinner.succeed(`Upserting item: ${item.name}`);
         const promise = new Promise((resolve, reject) => {
             connection.query(`INSERT INTO item_data (id, normalized_name, base_price, width, height, properties)
