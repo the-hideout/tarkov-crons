@@ -1,10 +1,10 @@
 const mysql = require('mysql2');
 
 const connection = mysql.createPool({
-    host     :  '6hvetf6kcr04.us-east-1.psdb.cloud',
-    user     : '0js449syx4y0',
-    password : 'pscale_pw_iAk-6MSUCyfxOVuxanCMmANBBEmDr7CbInbW_nYH8Wo',
-    database : 'tarkov',
+    host     : process.env.DATABASE_HOST,
+    user     : process.env.PSCALE_USER,
+    password : process.env.PSCALE_PASS,
+    database : process.env.DATABASE_NAME,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
