@@ -15,7 +15,7 @@ module.exports = async () => {
         timestamp
         desc
     LIMIT 1`);
-    if (junkboxLastScan.lengh === 0) {
+    if (junkboxLastScan.length === 0) {
         try {
             const response = await cloudflare(`/values/TRADER_ITEMS`, 'PUT', JSON.stringify({}));
             console.log(response);
