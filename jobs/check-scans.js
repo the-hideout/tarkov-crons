@@ -1,4 +1,4 @@
-const connection = require('../modules/db-connection');
+const { connection } = require('../modules/db-connection');
 const webhook = require('../modules/webhook');
 
 const ignoreSources = [
