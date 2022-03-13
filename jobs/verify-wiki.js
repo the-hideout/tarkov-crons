@@ -37,9 +37,8 @@ const postMessage = (spinner, id, name, link, type) => {
             break;
     }
 
-    got.post(`https://notifyy-mcnotifyface.herokuapp.com/out`, {
-        json: messageData,
-    });
+    message = messageData.title + '\n' + messageData.message;
+    webhook.alert(message);
 };
 
 module.exports = async () => {

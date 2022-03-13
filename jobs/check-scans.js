@@ -1,6 +1,7 @@
 const got = require('got');
 
 const connection = require('../modules/db-connection');
+const webhook = require('../modules/webhook');
 
 const ignoreSources = [
     'DESKTOP-DA1IT79',
@@ -43,9 +44,8 @@ module.exports = async () => {
                 users: 'QBfmptGTgQoOS2gGOobd5Olfp31hTKrG',
             };
 
-            got.post(`https://notifyy-mcnotifyface.herokuapp.com/out`, {
-                json: messageData,
-            });
+            message = messageData.title + '\n' + messageData.message + '\n' + messageData.users;
+            webhook.alert(message);
         }
     });
 };

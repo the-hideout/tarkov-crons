@@ -9,6 +9,8 @@ services:
       CLOUDFLARE_TOKEN: ${CLOUDFLARE_TOKEN}
       PSCALE_USER: ${PSCALE_USER}
       PSCALE_PASS: ${PSCALE_PASS}
+      WEBHOOK_URL: ${WEBHOOK_URL}
+      WEBHOOK_USER: tarkov-cron-alert
       DATABASE_NAME: tarkov
       DATABASE_HOST: 6hvetf6kcr04.us-east-1.psdb.cloud
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}

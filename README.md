@@ -26,7 +26,7 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 | update-item-properties | `15 * * * *` | [![update-item-properties](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-item-properties.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-item-properties.yml) |
 | update-trader-prices | `45 * * * *` | [![update-trader-prices](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-trader-prices.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-trader-prices.yml) |
 | check-scans 🚧 | `20 * * * *`  | [![check-scans](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml) |
-| clear-checkouts 🚧 | `5 */6 * * *` | [![clear-checkouts](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml) |
+| clear-checkouts | `5 */6 * * *` | [![clear-checkouts](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml) |
 
 ## Example 📸
 
