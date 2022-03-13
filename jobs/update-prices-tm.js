@@ -14,7 +14,7 @@ const {
 const {
     MongoClient
 } = require('mongodb');
-const url = "mongodb+srv://john:ebTvhTLPDcI7nsR4@cluster0.kkbpf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const url = process.env.MONGODB_URL;
 const client = new MongoClient(url);
 const dbName = 'mirror';
 
