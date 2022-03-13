@@ -31,8 +31,8 @@ module.exports = async () => {
         let query = {
             //_id: '5b7c710788a4506dec015957'
         }
-        
-        let res = await collection.find(query).limit(10).toArray();
+
+        let res = await collection.find(query).toArray();
 
         for (const item of res) {
             const id = item['_id']
