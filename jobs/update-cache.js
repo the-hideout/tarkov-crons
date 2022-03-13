@@ -5,7 +5,7 @@ const roundTo = require('round-to');
 
 const cloudflare = require('../modules/cloudflare');
 const remoteData = require('../modules/remote-data');
-const doQuery = require('../modules/do-query');
+const { doQuery } = require('../modules/db-connection');
 
 module.exports = async () => {
     const itemMap = await remoteData.get();

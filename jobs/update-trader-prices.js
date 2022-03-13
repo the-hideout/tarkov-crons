@@ -2,9 +2,25 @@ const fs = require('fs');
 const path = require('path');
 
 const cloudflare = require('../modules/cloudflare');
-const doQuery = require('../modules/do-query');
+const { doQuery } = require('../modules/db-connection');
+
+const outputPrices = async (prices) => {
+    fs.writeFileSync(path.join(__dirname, '..', 'dumps', 'trader-inventory.json'), JSON.stringify(prices, null, 4));
+
+    try {
+        const response = await cloudflare(`/values/TRADER_ITEMS`, 'PUT', JSON.stringify(prices));
+        console.log(response);
+    } catch (requestError){
+        console.error(requestError);
+    }
+
+    // Possibility to POST to a Discord webhook here with cron status details
+    console.log(`Process completed`);
+    process.exit(0);
+};
 
 module.exports = async () => {
+    const outputData = {};
     const junkboxLastScan = await doQuery(`SELECT
         *
     FROM
@@ -16,12 +32,7 @@ module.exports = async () => {
         desc
     LIMIT 1`);
     if (junkboxLastScan.length === 0) {
-        try {
-            const response = await cloudflare(`/values/TRADER_ITEMS`, 'PUT', JSON.stringify({}));
-            console.log(response);
-        } catch (requestError){
-            console.error(requestError);
-        }
+        await outputPrices(outputData);
         return;
     }
 
@@ -124,8 +135,6 @@ module.exports = async () => {
         };
     }
 
-    const outputData = {};
-
     for(const traderItem of traderItems){
         if(!latestTraderPrices[traderItem.id]){
             continue;
@@ -152,16 +161,5 @@ module.exports = async () => {
         });
     }
 
-    fs.writeFileSync(path.join(__dirname, '..', 'dumps', 'trader-inventory.json'), JSON.stringify(outputData, null, 4));
-
-    try {
-        const response = await cloudflare(`/values/TRADER_ITEMS`, 'PUT', JSON.stringify(outputData));
-        console.log(response);
-    } catch (requestError){
-        console.error(requestError);
-    }
-
-    // Possibility to POST to a Discord webhook here with cron status details
-    console.log(`Process completed`);
-    process.exit(0);
+    await outputPrices(outputData);
 };

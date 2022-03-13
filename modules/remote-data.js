@@ -12,8 +12,7 @@ const client = new S3Client({
     credentials: fromEnv(),
 });
 
-const connection = require('./db-connection');
-const doQuery = require('./do-query');
+const { connection, doQuery } = require('./db-connection');
 
 const getPercentile = (validValues) => {
     if(validValues.length === 0){

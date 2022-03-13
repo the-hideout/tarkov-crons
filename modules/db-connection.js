@@ -13,15 +13,31 @@ const connection = mysql.createPool({
     }
 });
 
-connection.promiseQuery = async (sql) => {
-    return new Promise((resolve, reject) => {
-        connection.query(sql, (queryError, results) => {
-            if(queryError){
-                return reject(queryError);
-            }
-            return resolve(results);
-        });
-    });
-};
+module.exports = {
+    connection: connection,
+    doQuery: async (query, params) => {
+        let responseData;
+        const promise = new Promise((resolve, reject) => {
+            connection.query(query,
+                params
+                , async (error, results) => {
+                    if (error) {
+                        reject(error)
+                    }
 
-module.exports = connection;
+                    resolve(results);
+                }
+            );
+        });
+
+        try {
+            responseData = await promise;
+        } catch (upsertError){
+            console.error(upsertError);
+
+            throw upsertError;
+        }
+
+        return responseData;
+    }
+};

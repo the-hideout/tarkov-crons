@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const doQuery = require('../modules/do-query');
+const { doQuery } = require('../modules/db-connection');
 
 const keys = {
     interchange: {

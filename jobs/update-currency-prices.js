@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const cloudflare = require('../modules/cloudflare');
-const doQuery = require('../modules/do-query');
+const { doQuery } = require('../modules/db-connection');
 
 module.exports = async () => {
     const currencyPrices = await doQuery(`
