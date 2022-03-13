@@ -5,7 +5,7 @@ const roundTo = require('round-to');
 
 const cloudflare = require('../modules/cloudflare');
 const remoteData = require('../modules/remote-data');
-const { doQuery } = require('../modules/db-connection');
+const { doQuery, jobComplete } = require('../modules/db-connection');
 
 module.exports = async () => {
     const itemMap = await remoteData.get();
@@ -117,5 +117,5 @@ module.exports = async () => {
 
     // Possibility to POST to a Discord webhook here with cron status details
     console.log(`Process completed`);
-    process.exit(0);
+    await jobComplete();
 };

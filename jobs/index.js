@@ -1,5 +1,7 @@
 const schedule = require('node-schedule');
 
+const { connection } = require('../modules/db-connection');
+
 const runJob = function(name, cronSchedule) {
     const jobModule = require(`./${name}`);
     console.log(`Setting up ${name} job to run ${cronSchedule}`);
@@ -19,6 +21,7 @@ module.exports = () => {
     if(process.env.NODE_ENV !== 'production'){
         return true;
     }
+    connection.keepAlive = true;
 
     // runJob('check-scans', '20 * * * *');
     runJob('update-cache', '* * * * *');
