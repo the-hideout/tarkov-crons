@@ -1,7 +1,6 @@
 name: check-scans
 
 on:
-  # disabled for now
   push:
     branches: [main]
   # schedule:
