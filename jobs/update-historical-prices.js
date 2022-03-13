@@ -66,7 +66,7 @@ module.exports = async () => {
                 timestamp: new Date().setTime(timestamp),
             });
         }
-get
+
         cloudflareData.push({
             key: `historical-prices-${itemId}`,
             value: JSON.stringify(itemPriceData[itemId]),
