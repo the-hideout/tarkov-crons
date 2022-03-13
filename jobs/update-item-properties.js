@@ -8,13 +8,7 @@ const ttData = require('../modules/tt-data');
 const connection = require('../modules/db-connection');
 const {categories} = require('../modules/category-map');
 
-let bsgData;
-
-const itemCategory = (item) => {
-    const itemCategory = getItemCategory(item);
-
-    return itemCategory?.id || item._parent;
-};
+const bsgDataHelper = require('./update-bsg-data');
 
 const getItemCategory = (item) => {
     if(!item){
@@ -155,6 +149,18 @@ const mappingProperties = {
 };
 
 module.exports = async () => {
+
+    try {
+        console.log('Running bsgData...');
+        await bsgDataHelper();
+        console.log('Completed bsgData...');
+    } catch (updateError){
+        console.error(updateError);
+    
+        console.log('Failed to get bsgData, exiting...');
+        process.exit(1);
+    }
+
     const allTTItems = await ttData();
 
     bsgData = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'bsg-data.json')));
