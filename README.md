@@ -19,14 +19,14 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 | update-hideout | `*/10 * * * *` | [![update-hideout](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-hideout.yml) |
 | update-quests | `*/10 * * * *` | [![update-quests](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-quests.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-quests.yml) |
 | update-existing-bases | `*/10 * * * *` | [![update-existing-bases](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-existing-bases.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-existing-bases.yml) |
-| game-data | `*/10 * * * *` | [![game-data](https://github.com/the-hideout/tarkov-crons/actions/workflows/game-data.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/game-data.yml) |
 | update-historical-prices | `*/10 * * * *` | [![update-historical-prices](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-historical-prices.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-historical-prices.yml) |
+| game-data | `*/15 * * * *` | [![game-data](https://github.com/the-hideout/tarkov-crons/actions/workflows/game-data.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/game-data.yml) |
 | update-currency-prices | `0 3,15 * * *` | [![update-currency-prices](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-currency-prices.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-currency-prices.yml) |
 | verify-wiki | `5 9 * * *` | [![verify-wiki](https://github.com/the-hideout/tarkov-crons/actions/workflows/verify-wiki.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/verify-wiki.yml) |
 | update-item-properties | `15 * * * *` | [![update-item-properties](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-item-properties.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-item-properties.yml) |
 | update-trader-prices | `45 * * * *` | [![update-trader-prices](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-trader-prices.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-trader-prices.yml) |
-| check-scans 🚧 | `20 * * * *`  | [![check-scans](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml) |
-| clear-checkouts 🚧 | `5 */6 * * *` | [![clear-checkouts](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml) |
+| check-scans | `20 * * * *`  | [![check-scans](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml) |
+| clear-checkouts | `5 */6 * * *` | [![clear-checkouts](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml) |
 
 ## Example 📸
 
@@ -67,7 +67,16 @@ Setup:
 
 - Install [Docker](https://docs.docker.com/get-docker/)
 - Install [docker-compose](https://docs.docker.com/compose/install/)
-- Add the necessary secrets to your `.env` file
+
+Run the following commands in a bash terminal to setup your environment variables correctly:
+
+```bash
+export CLOUDFLARE_TOKEN=<token>
+export PSCALE_USER=<planetscale-username>
+export PSCALE_PASS=<planetscale-password>
+export AWS_ACCESS_KEY_ID=<aws-access-key-id>
+export AWS_SECRET_ACCESS_KEY=<aws-secret-access-key>
+```
 
 Run:
 

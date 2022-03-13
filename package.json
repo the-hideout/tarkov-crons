@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": "16.x"
+    "node": "17.x"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -35,6 +35,7 @@
     "object-path": "^0.11.8",
     "ora": "^5.4.1",
     "parse-duration": "^1.0.0",
+    "request": "^2.88.2",
     "rollbar": "^2.24.0",
     "round-to": "^5.0.0",
     "unidecode": "^0.1.8"

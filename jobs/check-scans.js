@@ -1,6 +1,5 @@
-const got = require('got');
-
 const connection = require('../modules/db-connection');
+const webhook = require('../modules/webhook');
 
 const ignoreSources = [
     'DESKTOP-DA1IT79',
@@ -15,8 +14,9 @@ const ignoreSources = [
 
 module.exports = async () => {
     connection.query('select max(timestamp) as timestamp, source from price_data group by source order by `timestamp` desc', (queryError, results) => {
-        for(const result of results){
-            if(ignoreSources.includes(result.source)){
+        for (const result of results) {
+            if (ignoreSources.includes(result.source)) {
+                console.log(`Ignoring source: ${result.source}`);
                 continue;
             }
 
@@ -30,10 +30,10 @@ module.exports = async () => {
             // console.log(lastScan.getTimezoneOffset());
             // console.log(new Date().getTimezoneOffset());
 
-            const lastScanAge = Math.floor((new Date().getTime() - lastScan.getTime()) / 1000)
+            const lastScanAge = Math.floor((new Date().getTime() - lastScan.getTime()) / 1000);
             console.log(`${result.source}: ${lastScanAge}s`);
 
-            if(lastScanAge < 1800){
+            if (lastScanAge < 1800) {
                 continue;
             }
 
@@ -43,9 +43,13 @@ module.exports = async () => {
                 users: 'QBfmptGTgQoOS2gGOobd5Olfp31hTKrG',
             };
 
-            got.post(`https://notifyy-mcnotifyface.herokuapp.com/out`, {
-                json: messageData,
-            });
+            console.log('Sending alert');
+            message = messageData.title + '\n' + messageData.message + '\n' + messageData.users;
+            webhook.alert(message);
         }
+
+    // Possibility to POST to a Discord webhook here with cron status details
+    console.log(`Process completed`);
+    process.exit(0);
     });
 };

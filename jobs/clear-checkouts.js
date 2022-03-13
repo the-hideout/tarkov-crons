@@ -51,4 +51,8 @@ module.exports = async () => {
 
         throw upsertError;
     }
+
+    // Possibility to POST to a Discord webhook here with cron status details
+    console.log(`Process completed`);
+    process.exit(0);
 };
