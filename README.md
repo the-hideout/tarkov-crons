@@ -76,6 +76,7 @@ export PSCALE_USER=<planetscale-username>
 export PSCALE_PASS=<planetscale-password>
 export AWS_ACCESS_KEY_ID=<aws-access-key-id>
 export AWS_SECRET_ACCESS_KEY=<aws-secret-access-key>
+export WEBHOOK_URL=<discord-webhook-url> # optional
 ```
 
 Run:
