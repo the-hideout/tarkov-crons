@@ -18,9 +18,8 @@ const url = process.env.MONGODB_URL;
 const client = new MongoClient(url);
 const dbName = 'mirror';
 
-main();
 
-async function main() {
+module.exports = async () => {
 
     await client.connect();
     console.log('Connected successfully to server');
@@ -30,9 +29,10 @@ async function main() {
         let collection = db.collection('itemdata')
 
         let query = {
-            _id: '544fb45d4bdc2dee738b4568'
+            //_id: '5b7c710788a4506dec015957'
         }
-        let res = await collection.find(query).toArray();
+        
+        let res = await collection.find(query).limit(10).toArray();
 
         for (const item of res) {
             const id = item['_id']
@@ -51,22 +51,28 @@ async function main() {
                                AND item_id = '${id}');
             `)
 
-            console.log(`${name}`);
-
             //Update trader
-            /* if (marketData['buyPrices'].length) {
+            if (marketData['buyPrices'].length) {
                 //Contains buyPrices
-                for (i2 in marketData['buyPrices']) {
-                    if (marketData['buyPrices'][i2]['type'] !== 'trader') {
+                for (const i2 of marketData['buyPrices']) {
+                    if (i2['type'] !== 'trader') {
                         //We need the trader price only.
                         continue;
                     }
 
-                    const traderPrice = marketData['buyPrices'][i2]
+                    const traderPrice = i2
                     const price = traderPrice['price']
-                    const currencySymbol = traderPrice['cur']
-                    const trader = traderPrice['trader']
+                    var currencySymbol = traderPrice['cur']
+                    const trader = traderPrice['trader'].toLowerCase()
                     const level = traderPrice['level']
+
+                    if (currencySymbol === '₽') {
+                        currencySymbol = 'RUB'
+                    } else if (currencySymbol === '$') {
+                        currencySymbol = 'USD'
+                    } else {
+                        currencySymbol = 'EUR'
+                    }
 
                     console.log(`Item ${name} | Trader ${trader} | Level ${level} | Price ${price} | CUR ${currencySymbol}`);
 
@@ -76,7 +82,7 @@ async function main() {
                     WHERE
                         item_id='${id}'
                         AND trader_name='${trader}'
-                        AND currency='RUB'
+                        AND currency='${currencySymbol}'
                         AND min_level=${level}
                     LIMIT 1`)
 
@@ -84,14 +90,37 @@ async function main() {
                         //Item already exists, lets get ID and push price update.
                         const traderItemID = dbTraderItem[0]['id']
 
-                        console.log(traderItemID);
+                        await doQuery(`
+                                INSERT INTO trader_price_data (trade_id, price, source, timestamp)
+                                SELECT '${traderItemID}', ${price}, 'tm', '${timestamp}'
+                                FROM DUAL
+                                WHERE NOT EXISTS(SELECT *
+                                        FROM trader_price_data
+                                        WHERE timestamp = '${timestamp}'
+                                         AND trade_id = '${traderItemID}');
+                                `)
+
+                        //console.log(traderItemID);
                     } else {
                         //Item doesn't exists, lets push it and THEN push the price update with the new ID.
+                        const output = await doQuery(
+                            `
+                                INSERT INTO trader_items (item_id, trader_name, currency, min_level, quest_unlock_id, timestamp)
+                                VALUES ('${id}', '${trader}', '${currencySymbol}', '${level}', NULL, '${timestamp}');
+                            `
+                        )
+                        
+                        await doQuery(`
+                            INSERT INTO trader_price_data (trade_id, price, source, timestamp)
+                            VALUES (${output.insertId}, '${price}', 'tm', '${timestamp}');
+                        `)
+
+                        //console.log(output);
                     }
 
-                    console.log(dbTraderItem);
+                    //console.log(dbTraderItem);
                 }
-            } */
+            }
         }
     } catch (err) {
         console.log(err);
