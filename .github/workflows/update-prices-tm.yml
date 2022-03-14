@@ -1,4 +1,4 @@
-name: update-hideout
+name: update-prices-tm
 
 on:
   push:
