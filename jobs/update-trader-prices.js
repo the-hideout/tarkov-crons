@@ -111,7 +111,7 @@ module.exports = async () => {
     FROM
         trader_price_data
     WHERE
-        timestamp > ?;`, [scanOffsetTimestamp[0].timestamp]);
+        timestamp > ?;`, [scanOffsetTimestamp]);
 
     const latestTraderPrices = {};
 

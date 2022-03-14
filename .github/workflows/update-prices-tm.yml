@@ -1,0 +1,26 @@
+name: update-hideout
+
+on:
+  push:
+    branches: [main]
+  # schedule:
+  #   - cron: "30 * * * *"
+
+jobs:
+  update-prices-tm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: satackey/action-docker-layer-caching@46d2c640b1d8ef50d185452ad6fb324e6bd1d052 # pin@v0.0.11
+        continue-on-error: true
+      - name: update-prices-tm
+        run: docker-compose up --build --exit-code-from tarkov-cron
+        env:
+          TARKOV_CRON: update-prices-tm
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+          PSCALE_USER: ${{ secrets.PSCALE_USER }}
+          PSCALE_PASS: ${{ secrets.PSCALE_PASS }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          MONGODB_URL: ${{ secrets.MONGODB_URL }}

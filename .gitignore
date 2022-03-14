@@ -2,3 +2,4 @@
 node_modules
 dumps/*
 !.gitkeep
+test-tm.js
