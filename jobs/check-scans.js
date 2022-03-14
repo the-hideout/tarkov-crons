@@ -1,4 +1,4 @@
-const { connection } = require('../modules/db-connection');
+const { connection, jobComplete } = require('../modules/db-connection');
 const webhook = require('../modules/webhook');
 
 const ignoreSources = [
@@ -13,7 +13,7 @@ const ignoreSources = [
 ];
 
 module.exports = async () => {
-    connection.query('select max(timestamp) as timestamp, source from price_data group by source order by `timestamp` desc', (queryError, results) => {
+    connection.query('select max(timestamp) as timestamp, source from price_data group by source order by `timestamp` desc', async (queryError, results) => {
         for (const result of results) {
             if (ignoreSources.includes(result.source)) {
                 console.log(`Ignoring source: ${result.source}`);
@@ -48,8 +48,8 @@ module.exports = async () => {
             webhook.alert(message);
         }
 
-    // Possibility to POST to a Discord webhook here with cron status details
-    console.log(`Process completed`);
-    process.exit(0);
+        // Possibility to POST to a Discord webhook here with cron status details
+        console.log(`Process completed`);
+        await jobComplete();
     });
 };

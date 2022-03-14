@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const cloudflare = require('../modules/cloudflare');
-const { doQuery } = require('../modules/db-connection');
+const { doQuery, jobComplete } = require('../modules/db-connection');
 
 const outputPrices = async (prices) => {
     fs.writeFileSync(path.join(__dirname, '..', 'dumps', 'trader-inventory.json'), JSON.stringify(prices, null, 4));
@@ -16,7 +16,7 @@ const outputPrices = async (prices) => {
 
     // Possibility to POST to a Discord webhook here with cron status details
     console.log(`Process completed`);
-    process.exit(0);
+    await jobComplete();
 };
 
 module.exports = async () => {
