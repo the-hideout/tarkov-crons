@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 
-const connection = mysql.createPool({
+const pool = mysql.createPool({
     host     : process.env.DATABASE_HOST,
     user     : process.env.PSCALE_USER,
     password : process.env.PSCALE_PASS,
@@ -12,16 +12,47 @@ const connection = mysql.createPool({
         rejectUnauthorized: true
     }
 });
+pool.keepAlive = false;
 
-connection.promiseQuery = async (sql) => {
-    return new Promise((resolve, reject) => {
-        connection.query(sql, (queryError, results) => {
-            if(queryError){
-                return reject(queryError);
-            }
-            return resolve(results);
+module.exports = {
+    connection: pool,
+    doQuery: async (query, params) => {
+        let responseData;
+        const promise = new Promise((resolve, reject) => {
+            pool.query(query,
+                params
+                , async (error, results) => {
+                    if (error) {
+                        reject(error)
+                    }
+
+                    resolve(results);
+                }
+            );
         });
-    });
-};
 
-module.exports = connection;
+        try {
+            responseData = await promise;
+        } catch (upsertError){
+            console.error(upsertError);
+
+            throw upsertError;
+        }
+
+        return responseData;
+    },
+    jobComplete: async () => {
+        if (pool.keepAlive) {
+            return Promise.resolve(false);
+        }
+        return new Promise((resolve, reject) => {
+            pool.end(error => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(true);
+            });
+        });
+    }
+};

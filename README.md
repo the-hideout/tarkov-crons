@@ -27,6 +27,7 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 | update-trader-prices | `45 * * * *` | [![update-trader-prices](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-trader-prices.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-trader-prices.yml) |
 | check-scans | `20 * * * *`  | [![check-scans](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/check-scans.yml) |
 | clear-checkouts | `5 */6 * * *` | [![clear-checkouts](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/clear-checkouts.yml) |
+| update-prices-tm | `30 * * * *` | [![clear-checkouts](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-prices-tm.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-prices-tm.yml) |
 
 ## Example 📸
 
@@ -76,6 +77,7 @@ export PSCALE_USER=<planetscale-username>
 export PSCALE_PASS=<planetscale-password>
 export AWS_ACCESS_KEY_ID=<aws-access-key-id>
 export AWS_SECRET_ACCESS_KEY=<aws-secret-access-key>
+export WEBHOOK_URL=<discord-webhook-url> # optional
 ```
 
 Run:

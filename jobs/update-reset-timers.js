@@ -1,4 +1,4 @@
-const connection = require('../modules/db-connection');
+const {connection, jobComplete} = require('../modules/db-connection');
 const cloudflare = require('../modules/cloudflare');
 
 module.exports = async () => {
@@ -58,5 +58,5 @@ module.exports = async () => {
 
     // Possibility to POST to a Discord webhook here with cron status details
     console.log(`Process completed`);
-    process.exit(0);
+    await jobComplete();
 };

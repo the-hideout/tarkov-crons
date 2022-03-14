@@ -2,9 +2,25 @@ const fs = require('fs');
 const path = require('path');
 
 const cloudflare = require('../modules/cloudflare');
-const doQuery = require('../modules/do-query');
+const { doQuery, jobComplete } = require('../modules/db-connection');
+
+const outputPrices = async (prices) => {
+    fs.writeFileSync(path.join(__dirname, '..', 'dumps', 'trader-inventory.json'), JSON.stringify(prices, null, 4));
+
+    try {
+        const response = await cloudflare(`/values/TRADER_ITEMS`, 'PUT', JSON.stringify(prices));
+        console.log(response);
+    } catch (requestError){
+        console.error(requestError);
+    }
+
+    // Possibility to POST to a Discord webhook here with cron status details
+    console.log(`Process completed`);
+    await jobComplete();
+};
 
 module.exports = async () => {
+    const outputData = {};
     const junkboxLastScan = await doQuery(`SELECT
         *
     FROM
@@ -15,7 +31,10 @@ module.exports = async () => {
         timestamp
         desc
     LIMIT 1`);
-    if (junkboxLastScan.lengh === 0) return;
+    if (junkboxLastScan.length === 0) {
+        await outputPrices(outputData);
+        return;
+    }
 
     const scanOffsetTimestamp = new Date(junkboxLastScan[0].timestamp).setHours(junkboxLastScan[0].timestamp.getHours() - 6);
 
@@ -92,7 +111,7 @@ module.exports = async () => {
     FROM
         trader_price_data
     WHERE
-        timestamp > ?;`, [scanOffsetTimestamp[0].timestamp]);
+        timestamp > ?;`, [scanOffsetTimestamp]);
 
     const latestTraderPrices = {};
 
@@ -115,8 +134,6 @@ module.exports = async () => {
             timestamp: traderPrice.timestamp,
         };
     }
-
-    const outputData = {};
 
     for(const traderItem of traderItems){
         if(!latestTraderPrices[traderItem.id]){
@@ -144,16 +161,5 @@ module.exports = async () => {
         });
     }
 
-    fs.writeFileSync(path.join(__dirname, '..', 'dumps', 'trader-inventory.json'), JSON.stringify(outputData, null, 4));
-
-    try {
-        const response = await cloudflare(`/values/TRADER_ITEMS`, 'PUT', JSON.stringify(outputData));
-        console.log(response);
-    } catch (requestError){
-        console.error(requestError);
-    }
-
-    // Possibility to POST to a Discord webhook here with cron status details
-    console.log(`Process completed`);
-    process.exit(0);
+    await outputPrices(outputData);
 };

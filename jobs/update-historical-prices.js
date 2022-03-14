@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const cloudflare = require('../modules/cloudflare');
-const doQuery = require('../modules/do-query');
+const { doQuery, jobComplete } = require('../modules/db-connection');
 
 module.exports = async () => {
     const aWeekAgo = new Date();
@@ -92,5 +92,5 @@ module.exports = async () => {
 
     // Possibility to POST to a Discord webhook here with cron status details
     console.log(`Process completed`);
-    process.exit(0);
+    await jobComplete();
 };

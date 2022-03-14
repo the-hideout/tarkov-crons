@@ -1,6 +1,6 @@
 const got = require('got');
 
-const connection = require('../modules/db-connection');
+const {connection, jobComplete} = require('../modules/db-connection');
 
 module.exports = async () => {
     let presets;
@@ -54,4 +54,5 @@ module.exports = async () => {
     }
 
     console.log('Done with all presets');
+    await jobComplete();
 };

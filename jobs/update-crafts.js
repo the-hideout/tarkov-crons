@@ -11,7 +11,7 @@ const cloudflare = require('../modules/cloudflare');
 const oldNames = require('../old-names.json');
 const christmasTreeCrafts = require('../public/data/christmas-tree-crafts.json');
 
-const connection = require('../modules/db-connection');
+const { connection, jobComplete } = require('../modules/db-connection');
 
 let itemData = false;
 
@@ -314,5 +314,5 @@ module.exports = async function() {
 
     // Possibility to POST to a Discord webhook here with cron status details
     console.log(`Process completed`);
-    process.exit(0);
+    await jobComplete();
 };
