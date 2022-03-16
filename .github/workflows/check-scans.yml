@@ -3,8 +3,8 @@ name: check-scans
 on:
   push:
     branches: [main]
-  # schedule:
-  #   - cron: "20 * * * *"
+  schedule:
+    - cron: "20 * * * *"
 
 jobs:
   check-scans:
