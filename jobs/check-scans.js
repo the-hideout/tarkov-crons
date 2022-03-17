@@ -39,8 +39,7 @@ module.exports = async () => {
 
             const messageData = {
                 title: `Missing scans from ${encodeURIComponent(result.source)}`,
-                message: `The last scanned price was ${lastScanAge} seconds ago`,
-                users: 'QBfmptGTgQoOS2gGOobd5Olfp31hTKrG',
+                message: `The last scanned price was ${lastScanAge} seconds ago`
             };
 
             console.log('Sending alert');

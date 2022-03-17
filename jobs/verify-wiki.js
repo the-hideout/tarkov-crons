@@ -15,8 +15,7 @@ const nameToWikiLink = (name) => {
 const postMessage = (spinner, id, name, link, type) => {
     const messageData = {
         title: `Broken wiki link for ${name}`,
-        message: `Wiki link for ${name} does no longer work`,
-        users: 'QBfmptGTgQoOS2gGOobd5Olfp31hTKrG',
+        message: `Wiki link for ${name} does no longer work`
     };
 
     if(link){
