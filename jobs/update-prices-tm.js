@@ -63,7 +63,9 @@ module.exports = async () => {
                     }
 
                     const traderPrice = i2
-                    const price = traderPrice['priceCur']
+                    const price = traderPrice['priceCur'] || traderPrice['price'];
+                    if (price == null) continue;
+
                     var currencySymbol = traderPrice['cur']
                     const trader = traderPrice['trader'].toLowerCase()
                     const level = traderPrice['level']
