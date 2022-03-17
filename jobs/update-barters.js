@@ -8,7 +8,7 @@ const cloudflare = require('../modules/cloudflare');
 const oldNames = require('../old-names.json');
 const fixName = require('../modules/wiki-replacements');
 
-const { connection } = require('../modules/db-connection');
+const { connection, jobComplete } = require('../modules/db-connection');
 
 let itemData = false;
 const TRADES_URL = 'https://escapefromtarkov.gamepedia.com/Barter_trades';
@@ -279,5 +279,5 @@ module.exports = async function() {
 
     // Possibility to POST to a Discord webhook here with cron status details
     console.log(`Process completed`);
-    process.exit(0);
+    await jobComplete();
 };

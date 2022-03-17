@@ -3,7 +3,7 @@ const path = require('path');
 
 const ttData = require('../modules/tt-data');
 
-const {connection} = require('../modules/db-connection');
+const {connection, jobComplete} = require('../modules/db-connection');
 
 module.exports = async () => {
     const allTTItems = await ttData();
@@ -57,4 +57,5 @@ module.exports = async () => {
             throw upsertError;
         }
     }
+    await jobComplete();
 };

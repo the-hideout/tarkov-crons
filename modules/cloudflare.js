@@ -6,6 +6,9 @@ const got = require('got');
 const BASE_URL = 'https://api.cloudflare.com/client/v4/';
 
 const doRequest = async (cloudflarePath, method = 'GET', value, extraHeaders) => {
+    if (!process.env.CLOUDFLARE_TOKEN) {
+       return `Cloudflare token not set; skipping ${method} ${cloudflarePath}`;
+    }
     const requestOptions = {
         method: method,
         headers: {

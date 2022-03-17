@@ -5,7 +5,7 @@ const ora = require('ora');
 const objectPath = require('object-path');
 
 const ttData = require('../modules/tt-data');
-const {connection} = require('../modules/db-connection');
+const {connection, jobComplete} = require('../modules/db-connection');
 const {categories} = require('../modules/category-map');
 
 const bsgDataHelper = require('./update-bsg-data');
@@ -251,5 +251,5 @@ module.exports = async () => {
     
     // Possibility to POST to a Discord webhook here with cron status details
     console.log(`Process completed`);
-    process.exit(0);
+    await jobComplete();
 };

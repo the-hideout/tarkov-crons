@@ -3,8 +3,8 @@ name: update-historical-prices
 on:
   push:
     branches: [main]
-  # schedule:
-  #   - cron: "*/10 * * * *"
+  schedule:
+    - cron: "*/10 * * * *"
 
 jobs:
   update-historical-prices:

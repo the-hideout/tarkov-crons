@@ -1,7 +1,7 @@
 const got = require('got');
 const ora = require('ora');
 
-const {connection} = require('../modules/db-connection');
+const {connection, jobComplete} = require('../modules/db-connection');
 
 const nameToWikiLink = (name) => {
     const formattedName = name
@@ -141,5 +141,5 @@ module.exports = async () => {
     // Possibility to POST to a Discord webhook here with cron status details
     console.log(`${missing} items still missing a valid wiki link`);
     console.log(`Process completed`);
-    process.exit(0);
+    await jobComplete();
 };
