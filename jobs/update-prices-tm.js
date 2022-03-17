@@ -39,7 +39,7 @@ module.exports = async () => {
             const name = item['_name']
             const marketData = item['marketdata']
             const price = marketData['price']
-            const timestamp = moment(marketData['updated']).format("YYYY-MM-DD HH:mm:ss")
+            const timestamp = moment(marketData['priceUpdated']).format("YYYY-MM-DD HH:mm:ss")
 
             const result = await doQuery(`
             INSERT INTO price_data (item_id, price, source, timestamp)
@@ -51,6 +51,8 @@ module.exports = async () => {
                                AND item_id = '${id}');
             `)
 
+            console.log(`${res.indexOf(item)}/${res.length} | Item ${name} | Price ${price} | Updated ${timestamp}`);
+
             //Update trader
             if (marketData['buyPrices'].length) {
                 //Contains buyPrices
@@ -61,7 +63,7 @@ module.exports = async () => {
                     }
 
                     const traderPrice = i2
-                    const price = traderPrice['price']
+                    const price = traderPrice['priceCur']
                     var currencySymbol = traderPrice['cur']
                     const trader = traderPrice['trader'].toLowerCase()
                     const level = traderPrice['level']
@@ -74,7 +76,7 @@ module.exports = async () => {
                         currencySymbol = 'EUR'
                     }
 
-                    console.log(`Item ${name} | Trader ${trader} | Level ${level} | Price ${price} | CUR ${currencySymbol}`);
+                    //console.log(`Item ${name} | Trader ${trader} | Level ${level} | Price ${price} | CUR ${currencySymbol}`);
 
                     const dbTraderItem = await doQuery(`
                     SELECT id 
