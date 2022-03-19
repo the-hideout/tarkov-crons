@@ -7,6 +7,7 @@ const cloudflare = require('../modules/cloudflare');
 const remoteData = require('../modules/remote-data');
 const connection = require('../modules/db-connection');
 const moment = require('moment');
+const ora = require('ora');
 
 const {
     doQuery
@@ -14,6 +15,12 @@ const {
 const {
     MongoClient
 } = require('mongodb');
+const {
+    start
+} = require('repl');
+const {
+    timeEnd
+} = require('console');
 const url = process.env.MONGODB_URL;
 const client = new MongoClient(url);
 const dbName = 'mirror';
@@ -21,8 +28,10 @@ const dbName = 'mirror';
 
 module.exports = async () => {
 
+    const spinner = ora('Updating prices from TM.').start();
+
     await client.connect();
-    console.log('Connected successfully to server');
+    spinner.succeed('Connected successfully to server');
 
     try {
         const db = client.db(dbName);
@@ -32,7 +41,9 @@ module.exports = async () => {
             //_id: '5b7c710788a4506dec015957'
         }
 
-        let res = await collection.find(query).toArray();
+        ora('Loading items from DB.').start();
+
+        var res = await collection.find(query).toArray();
 
         for (const item of res) {
             const id = item['_id']
@@ -51,7 +62,9 @@ module.exports = async () => {
                                AND item_id = '${id}');
             `)
 
-            console.log(`${res.indexOf(item)}/${res.length} | Item ${name} | Price ${price} | Updated ${timestamp}`);
+            spinner.info(`Updating ${res.indexOf(item) + 1}/${res.length} with price ${price} at ${timestamp}.`)
+
+            //console.log(`${res.indexOf(item)}/${res.length} | Item ${name} | Price ${price} | Updated ${timestamp}`);
 
             //Update trader
             if (marketData['buyPrices'].length) {
@@ -113,7 +126,7 @@ module.exports = async () => {
                                 VALUES ('${id}', '${trader}', '${currencySymbol}', '${level}', NULL, '${timestamp}');
                             `
                         )
-                        
+
                         await doQuery(`
                             INSERT INTO trader_price_data (trade_id, price, source, timestamp)
                             VALUES (${output.insertId}, '${price}', 'tm', '${timestamp}');
@@ -128,9 +141,10 @@ module.exports = async () => {
         }
     } catch (err) {
         console.log(err);
+        spinner.fail(`${err}`)
         throw err;
     } finally {
-        client.close();
+        spinner.succeed(`Prices updated. ${items.length} total items.`)
         process.exit(0);
     }
 }
