@@ -144,7 +144,7 @@ module.exports = async () => {
         spinner.fail(`${err}`)
         throw err;
     } finally {
-        spinner.succeed(`Prices updated. ${items.length} total items.`)
+        //spinner.succeed(`Prices updated. ${items.length} total items.`)
         process.exit(0);
     }
 }
