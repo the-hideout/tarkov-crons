@@ -1,22 +1,22 @@
-name: update-prices-tm
+name: update-prices-tt
 
 on:
   push:
     branches: [main]
   schedule:
-    - cron: "0 */4 * * *"
+    - cron: "*/15 * * * *"
 
 jobs:
-  update-prices-tm:
+  update-prices-tt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: satackey/action-docker-layer-caching@46d2c640b1d8ef50d185452ad6fb324e6bd1d052 # pin@v0.0.11
         continue-on-error: true
-      - name: update-prices-tm
+      - name: update-prices-tt
         run: docker-compose up --build --exit-code-from tarkov-cron
         env:
-          TARKOV_CRON: update-prices-tm
+          TARKOV_CRON: update-prices-tt
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
           PSCALE_USER: ${{ secrets.PSCALE_USER }}
           PSCALE_PASS: ${{ secrets.PSCALE_PASS }}
