@@ -106,6 +106,7 @@ module.exports = async () => {
                             AND currency='${currency}'
                             AND min_level=${loyaltyLevel}
                         LIMIT 1`)
+                        
                 } else {
                     dbTraderItem = await doQuery(`
                         SELECT id 
@@ -117,6 +118,8 @@ module.exports = async () => {
                             AND min_level=${loyaltyLevel}
                             AND quest_unlock_id=${questID}
                         LIMIT 1`)
+
+                    console.log('This is a quest unlockable item.');
                 }
 
                 if (dbTraderItem.length > 0) {
@@ -135,11 +138,13 @@ module.exports = async () => {
 
                 } else {
                     //Item doesn't exists, lets push it and THEN push the price update with the new ID.
+                    console.log(`Item doesn't exist in the DB, inserting new row.`);
+
                     if (questID == undefined) {
                         const output = await doQuery(
                             `
                                         INSERT INTO trader_items (item_id, trader_name, currency, min_level, quest_unlock_id, timestamp)
-                                        VALUES ('${id}', '${trader}', '${currency}', '${level}', NULL, '${timestamp}');
+                                        VALUES ('${id}', '${trader}', '${currency}', '${loyaltyLevel}', NULL, '${timestamp}');
                                     `
                         )
     
@@ -151,7 +156,7 @@ module.exports = async () => {
                         const output = await doQuery(
                             `
                                         INSERT INTO trader_items (item_id, trader_name, currency, min_level, quest_unlock_id, timestamp)
-                                        VALUES ('${id}', '${trader}', '${currency}', '${level}', '${questID}', '${timestamp}');
+                                        VALUES ('${id}', '${trader}', '${currency}', '${loyaltyLevel}', '${questID}', '${timestamp}');
                                     `
                         )
     
