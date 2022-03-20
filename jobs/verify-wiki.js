@@ -1,5 +1,6 @@
 const got = require('got');
 const ora = require('ora');
+const webhook = require('../modules/webhook');
 
 const {connection, jobComplete} = require('../modules/db-connection');
 
