@@ -16,12 +16,8 @@ const nameToWikiLink = (name) => {
 const postMessage = (spinner, id, name, link, type) => {
     const messageData = {
         title: `Broken wiki link for ${name}`,
-        message: `Wiki link for ${name} does no longer work`
+        message: `Wiki link for ${name} no longer works`
     };
-
-    if(link){
-        messageData.url = link.replace( /_/g, '\\_' );
-    }
 
     switch (type) {
         case 'new':
@@ -37,8 +33,7 @@ const postMessage = (spinner, id, name, link, type) => {
             break;
     }
 
-    message = messageData.title + '\n' + messageData.message;
-    webhook.alert(message);
+    webhook.alert(messageData);
 };
 
 module.exports = async () => {
