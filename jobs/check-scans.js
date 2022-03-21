@@ -35,7 +35,10 @@ module.exports = async () => {
 
             if (lastScanAge < 1800) {
                 continue;
-            }
+            } else if (lastScanAge < 14400 && source == 'tm') {
+                //TM prices only update every 3 hours.
+                continue;
+            }            
 
             const messageData = {
                 title: `Missing scans from ${encodeURIComponent(result.source)}`,
