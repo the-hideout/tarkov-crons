@@ -35,7 +35,7 @@ module.exports = async () => {
 
             if (lastScanAge < 1800) {
                 continue;
-            } else if (lastScanAge < 14400 && source == 'tm') {
+            } else if (lastScanAge < 14400 && result.source == 'tm') {
                 //TM prices only update every 3 hours.
                 continue;
             }            
