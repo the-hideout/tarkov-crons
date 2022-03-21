@@ -132,6 +132,10 @@ module.exports = async () => {
                     //Item already exists, lets get ID and push price update.
                     const traderItemID = dbTraderItem[0]['id']
 
+                    doQuery(`
+                        UPDATE trader_items SET timestamp = '${timestamp}' WHERE id = '${traderItemID}'
+                    `)
+
                     await doQuery(`
                                     INSERT INTO trader_price_data (trade_id, price, source, timestamp)
                                     SELECT '${traderItemID}', ${price}, 'tt', '${timestamp}'
