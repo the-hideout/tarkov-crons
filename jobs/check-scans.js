@@ -46,8 +46,7 @@ module.exports = async () => {
             };
 
             console.log('Sending alert');
-            message = messageData.title + '\n' + messageData.message + '\n' + messageData.users;
-            webhook.alert(message);
+            webhook.alert(messageData);
         }
 
         // Possibility to POST to a Discord webhook here with cron status details
