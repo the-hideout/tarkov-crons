@@ -3,8 +3,8 @@ name: update-trader-prices
 on:
   push:
     branches: [main]
-  schedule:
-    - cron: "45 * * * *"
+  #schedule:
+  #  - cron: "45 * * * *"
 
 jobs:
   update-trader-prices:
