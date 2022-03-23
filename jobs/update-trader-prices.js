@@ -3,6 +3,7 @@ const path = require('path');
 
 const cloudflare = require('../modules/cloudflare');
 const { doQuery, jobComplete } = require('../modules/db-connection');
+const moment = require('moment');
 
 const outputPrices = async (prices) => {
     fs.writeFileSync(path.join(__dirname, '..', 'dumps', 'trader-inventory.json'), JSON.stringify(prices, null, 4));
@@ -36,8 +37,12 @@ module.exports = async () => {
         return;
     }
 
+    const scanOffsetTimestampMoment = moment(junkboxLastScan[0].timestamp).subtract(6, 'hours').format("YYYY-MM-DD HH:mm:ss");
     const scanOffsetTimestamp = new Date(junkboxLastScan[0].timestamp).setHours(junkboxLastScan[0].timestamp.getHours() - 6);
 
+    console.log(scanOffsetTimestampMoment);
+    console.log(scanOffsetTimestamp);
+    
     const currencyISO = {
         '5696686a4bdc2da3298b456a': 'USD',
         '569668774bdc2da2298b4568': 'EUR'
@@ -111,7 +116,7 @@ module.exports = async () => {
     FROM
         trader_price_data
     WHERE
-        timestamp > ?;`, [scanOffsetTimestamp]);
+        timestamp > ?;`, [scanOffsetTimestampMoment]);
 
     const latestTraderPrices = {};
 
