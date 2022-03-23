@@ -120,8 +120,6 @@ module.exports = async () => {
 
     const latestTraderPrices = {};
 
-    console.log(traderPriceData);
-
     for(const traderPrice of traderPriceData){
         if(!latestTraderPrices[traderPrice.trade_id]){
             latestTraderPrices[traderPrice.trade_id] = {
