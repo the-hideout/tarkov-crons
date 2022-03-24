@@ -15,9 +15,9 @@ services:
       DATABASE_HOST: 6hvetf6kcr04.us-east-1.psdb.cloud
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      BSG_BASE_PRICE_URL: https://gist.githubusercontent.com/austinhodak/e5ba6130583fe07a890c1e70d55b776c/raw/2ffea26a4a1e6e2275e0d804da96218e946c75dd/base_prices.json
-      BSG_DATA_URL: https://gist.githubusercontent.com/austinhodak/e5ba6130583fe07a890c1e70d55b776c/raw/ad6e370b7ae26a5a14a73fbf2f95c170890b64bf/item_data.json
-      BSG_TRANSLATIONS_URL: https://gist.githubusercontent.com/austinhodak/e5ba6130583fe07a890c1e70d55b776c/raw/e7fc0839a592f210234a9c3956a7d751edb06a13/translations.json
+      BSG_BASE_PRICE_URL: https://github.com/the-hideout/tarkov-crons/blob/main/data/base_prices.json
+      BSG_DATA_URL: https://github.com/the-hideout/tarkov-crons/blob/main/data/item_data.json
+      BSG_TRANSLATIONS_URL: https://github.com/the-hideout/tarkov-crons/blob/main/data/translations_en.json
       MONGODB_URL: ${MONGODB_URL}
 
     command: "${TARKOV_CRON}"
