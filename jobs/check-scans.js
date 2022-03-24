@@ -10,6 +10,7 @@ const ignoreSources = [
     'NUC-PC',
     'XETA',
     'Mats-HP',
+    'TT'
 ];
 
 module.exports = async () => {
