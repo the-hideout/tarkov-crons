@@ -22,16 +22,22 @@ const outputPrices = async (prices) => {
 
 module.exports = async () => {
     const outputData = {};
-    const junkboxLastScan = await doQuery(`SELECT
-        *
-    FROM
-        trader_price_data
-    WHERE
-        trade_id = 799
-    ORDER BY
-        timestamp
-        desc
-    LIMIT 1`);
+    const junkboxLastScan = await doQuery(`
+        SELECT
+            trader_price_data.*
+        FROM
+            trader_price_data
+        INNER JOIN
+            trader_items
+        ON
+            trader_items.id=trader_price_data.trade_id
+        WHERE
+            item_id = '5b7c710788a4506dec015957'
+        ORDER BY
+        trader_price_data.timestamp
+            desc
+        LIMIT 1
+    `);
     if (junkboxLastScan.length === 0) {
         await outputPrices(outputData);
         return;
