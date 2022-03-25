@@ -13,24 +13,19 @@ const nameToWikiLink = (name) => {
     return `https://escapefromtarkov.fandom.com/wiki/${formattedName}`;
 };
 
-const postMessage = (spinner, id, name, link, type) => {
+const postMessage = (spinner, item, foundNewLink) => {
     const messageData = {
-        title: `Broken wiki link for ${name}`,
-        message: `Wiki link for ${name} no longer works`
+        title: 'Broken wiki link',
+        message: item.name
     };
 
-    switch (type) {
-        case 'new':
-            spinner.succeed(`${id} | ${link} | ${name}`);
+    if (foundNewLink) {
+        spinner.succeed(`${item.id} | ${foundNewLink} | ${item.name}`);
 
-            messageData.title = `New wiki link for ${name}`;
-            messageData.message = `Updated wiki link for ${name}`;
-
-            break;
-        case 'broken':
-            spinner.fail(`${id} | ${link} | ${name}`);
-
-            break;
+        messageData.title = 'Updated wiki link';
+        messageData.message = item.name;
+    } else {
+        spinner.fail(`${item.id} | ${foundNewLink} | ${item.name}`);
     }
 
     webhook.alert(messageData);
@@ -99,8 +94,12 @@ module.exports = async () => {
                     }
                 }
 
+                if (shouldRemoveCurrentLink && newWikiLink) {
+                    shouldRemoveCurrentLink = false;
+                }
+
                 if(shouldRemoveCurrentLink && result.wiki_link){
-                    postMessage(spinner, result.id, result.name, newWikiLink, 'broken');
+                    postMessage(spinner, result, newWikiLink);
                     await new Promise((resolveUpdate, rejectUpdate) => {
                         connection.query(`UPDATE item_data SET wiki_link = ? WHERE id = ?`, ['', result.id], (error) => {
                             if(error){
@@ -114,7 +113,7 @@ module.exports = async () => {
                 }
 
                 if(newWikiLink){
-                    postMessage(spinner, result.id, result.name, newWikiLink, 'new');
+                    postMessage(spinner, result, newWikiLink);
                     await new Promise((resolveUpdate, rejectUpdate) => {
                         connection.query(`UPDATE item_data SET wiki_link = ? WHERE id = ?`, [newWikiLink, result.id], (error) => {
                             if(error){
