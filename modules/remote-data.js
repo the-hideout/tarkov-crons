@@ -102,7 +102,7 @@ const methods = {
 
             const priceTimer = timer('price-query');
             const batchSize = 100000;
-            let offset = 1;
+            let offset = 0;
             const priceSql = `
                 SELECT
                     price,
@@ -112,7 +112,7 @@ const methods = {
                     price_data
                 WHERE
                     timestamp > DATE_SUB(NOW(), INTERVAL 1 DAY)
-                LIMIT 100000, ?
+                LIMIT ?, 100000
             `;
             const priceResults = await doQuery(priceSql, [offset]);
             let moreResults = priceResults.length === 100000;
