@@ -1,6 +1,6 @@
 const got = require('got');
 
-const {connection, jobComplete} = require('../modules/db-connection');
+const {query, jobComplete} = require('../modules/db-connection');
 
 module.exports = async () => {
     let presets;
@@ -35,21 +35,11 @@ module.exports = async () => {
                 continue;
             }
 
-            await new Promise((resolve, reject) => {
-                connection.query(`INSERT IGNORE INTO item_children (container_item_id, child_item_id, count)
-                    VALUES (
-                        ?,
-                        ?,
-                        ?
-                    )`, [presets[presetId].baseId, item.id, 1], async (error, results) => {
-                        if (error) {
-                            reject(error)
-                        }
-
-                        resolve();
-                    }
-                );
-            });
+            await query(`
+                INSERT IGNORE INTO 
+                    item_children (container_item_id, child_item_id, count)
+                VALUES (?, ?, ?)
+            `, [presets[presetId].baseId, item.id, 1]);
         }
     }
 

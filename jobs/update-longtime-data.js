@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { doQuery, jobComplete } = require('../modules/db-connection');
+const { query, jobComplete } = require('../modules/db-connection');
 
 const keys = {
     interchange: {
@@ -101,7 +101,7 @@ const keys = {
 module.exports = async () => {
     for(const map in keys){
         console.time(`longtime-price-query-${map}`);
-        let historicalPriceData = await doQuery(`SELECT
+        let historicalPriceData = await query(`SELECT
             item_id, price, timestamp
         FROM
             price_data
@@ -140,7 +140,7 @@ module.exports = async () => {
     }
 
     console.time(`longtime-price-query-all`);
-    let historicalPriceData = await doQuery(`SELECT
+    let historicalPriceData = await query(`SELECT
         item_id, price, timestamp
     FROM
         price_data

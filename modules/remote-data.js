@@ -11,7 +11,7 @@ const client = new S3Client({
     credentials: fromEnv(),
 });
 
-const { connection, doQuery } = require('./db-connection');
+const { query } = require('./db-connection');
 
 const getPercentile = (validValues) => {
     if(validValues.length === 0){
@@ -57,7 +57,7 @@ const methods = {
 
         try {
             console.time('item-properties-query');
-            const allItemProperties = await doQuery(`SELECT
+            const allItemProperties = await query(`SELECT
                 item_id,
                 property_key,
                 property_value
@@ -76,7 +76,7 @@ const methods = {
             }
 
             const allDataTimer = timer('item-data-query');
-            const results = await doQuery(`
+            const results = await query(`
                 SELECT
                     item_data.*,
                     GROUP_CONCAT(DISTINCT types.type SEPARATOR ',') AS types
@@ -90,7 +90,7 @@ const methods = {
             allDataTimer.end();
 
             const translationsTimer = timer('translations-query');
-            const translationResults = await doQuery(`
+            const translationResults = await query(`
                 SELECT 
                     item_id, type, value 
                 FROM 
@@ -114,11 +114,11 @@ const methods = {
                     timestamp > DATE_SUB(NOW(), INTERVAL 1 DAY)
                 LIMIT ?, 100000
             `;
-            const priceResults = await doQuery(priceSql, [offset]);
+            const priceResults = await query(priceSql, [offset]);
             let moreResults = priceResults.length === 100000;
             while (moreResults) {
                 offset += batchSize;
-                const moreData = await doQuery(priceSql, [offset]);
+                const moreData = await query(priceSql, [offset]);
                 priceResults.push(...moreData);
                 if (moreData.length < batchSize) {
                     moreResults = false;
@@ -241,44 +241,20 @@ const methods = {
     },
     addType: async (id, type) => {
         console.log(`Adding ${type} for ${id}`);
-        return new Promise((resolve, reject) => {
-            connection.query(`INSERT IGNORE INTO types (item_id, type) VALUES ('${id}', '${type}')`, (queryError) => {
-                    if(queryError){
-                        return reject(queryError);
-                    }
-
-                    return resolve();
-                });
-        });
+        return query('INSERT IGNORE INTO types (item_id, type) VALUES (?, ?)', [id, type]);
     },
     removeType: async (id, type) => {
         console.log(`Removing ${type} for ${id}`);
-        return new Promise((resolve, reject) => {
-            connection.query(`DELETE FROM types WHERE item_id = '${id}' AND type='${type}'`, (queryError) => {
-                    if(queryError){
-                        return reject(queryError);
-                    }
-
-                    return resolve();
-                });
-        });
+        return query('DELETE FROM types WHERE item_id = ? AND type= ?', [id, type]);
     },
     setProperty: async (id, property, value) => {
         console.log(`Setting ${property} to ${value} for ${id}`);
-        return new Promise((resolve, reject) => {
-            connection.query(`UPDATE item_data SET ${property} = ? WHERE id = ?`, [value, id], (queryError) => {
-                if(queryError){
-                    return reject(queryError);
-                }
-
-                return resolve();
-            });
-        });
+        return query(`UPDATE item_data SET ${property} = ? WHERE id = ?`, [value, id]);
     },
     getTraderPrices: async () => {
         console.log('Loading all data');
         const allDataTimer = timer('item-data-query');
-        const items = await connection.promiseQuery(`
+        const items = await query(`
             SELECT
                 item_data.*,
                 GROUP_CONCAT(DISTINCT types.type SEPARATOR ',') AS types
@@ -291,14 +267,14 @@ const methods = {
         `);
         allDataTimer.end();
         const translationsTimer = timer('translations');
-        const translations = await connection.promiseQuery(`
+        const translations = await query(`
             SELECT item_id, type, value
             FROM translations
             WHERE language_code = 'en' AND (type = 'name' OR type = 'shortName')
         `);
         translationsTimer.end();
         const pricesTimer = timer('trader-prices');
-        const prices = await connection.promiseQuery(`
+        const prices = await query(`
             SELECT trader_items.id, trader_items.trader_name, trader_items.currency, trader_items.min_level, trader_items.quest_unlock_id, trader_items.item_id,
                 price_data.trade_id, price_data.id as price_id, price_data.price, price_data.source, price_data.timestamp
             FROM

@@ -9,7 +9,7 @@ const presetSize = require('../modules/preset-size');
 const ttData = require('../modules/tt-data');
 const oldShortnames = require('../old-shortnames.json');
 
-const { connection, jobComplete } = require('../modules/db-connection');
+const { connection, query, jobComplete } = require('../modules/db-connection');
 
 let bsgData;
 
@@ -252,8 +252,10 @@ module.exports = async () => {
         }
 
         spinner.succeed(`Upserting item: ${item.name}`);
-        const promise = new Promise((resolve, reject) => {
-            connection.query(`INSERT INTO item_data (id, normalized_name, base_price, width, height, properties)
+        try {
+            const results = await query(`
+                INSERT INTO 
+                    item_data (id, normalized_name, base_price, width, height, properties)
                 VALUES (
                     '${item._id}',
                     ${connection.escape(normalizeName(item._props.Name))},
@@ -267,59 +269,26 @@ module.exports = async () => {
                     base_price=${item._props.CreditsPrice},
                     width=${item.width},
                     height=${item.height},
-                    properties=${connection.escape(JSON.stringify(extraProperties))}`
-                , async (error, results) => {
-                    if (error) {
-                        reject(error)
-                    }
+                    properties=${connection.escape(JSON.stringify(extraProperties))}
+            `);
+            if(results.changedRows > 0){
+                console.log(`${item._props.Name} updated`);
+            }
 
-                    if(results.changedRows > 0){
-                        console.log(`${item._props.Name} updated`);
-                    }
+            if(results.insertId !== 0){
+                console.log(`${item._props.Name} added`);
+            }
 
-                    if(results.insertId !== 0){
-                        console.log(`${item._props.Name} added`);
-                    }
-
-                    for(const insertKey of INSERT_KEYS){
-                        const promise = new Promise((translationResolve, translationReject) => {
-                            connection.query(`INSERT IGNORE INTO translations (item_id, type, language_code, value)
-                                VALUES (
-                                    ?,
-                                    ?,
-                                    ?,
-                                    ?
-                                )`, [item._id, insertKey.toLowerCase(), 'en', item[insertKey].trim()], (error) => {
-                                    if (error) {
-                                        translationReject(error);
-                                    }
-
-                                    translationResolve();
-                                }
-                            );
-                        });
-
-                        try {
-                            await promise;
-                        } catch (upsertError){
-                            console.error(upsertError);
-
-                            throw upsertError;
-                        }
-
-                    }
-
-                    resolve();
-                }
-            );
-        });
-
-        try {
-            await promise;
-        } catch (upsertError){
-            console.error(upsertError);
-
-            throw upsertError;
+            for(const insertKey of INSERT_KEYS){
+                await query(`
+                    INSERT IGNORE INTO 
+                        translations (item_id, type, language_code, value)
+                    VALUES (?, ?, ?, ?)
+                `, [item._id, insertKey.toLowerCase(), 'en', item[insertKey].trim()]);
+            }
+        } catch (error){
+            console.error(error);
+            return Promise.reject(error);
         }
     }
 

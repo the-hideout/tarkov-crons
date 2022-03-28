@@ -2,10 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 const cloudflare = require('../modules/cloudflare');
-const { doQuery, jobComplete } = require('../modules/db-connection');
+const { query, jobComplete } = require('../modules/db-connection');
 
 module.exports = async () => {
-    const currencyPrices = await doQuery(`
+    const currencyPrices = await query(`
         SELECT
             item_id, trader_name, currency, min_level, quest_unlock_id,
             price, trader_items.timestamp as offer_timestamp, trader_price_data.timestamp as price_timestamp

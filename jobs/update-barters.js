@@ -8,7 +8,7 @@ const cloudflare = require('../modules/cloudflare');
 const oldNames = require('../old-names.json');
 const fixName = require('../modules/wiki-replacements');
 
-const { connection, jobComplete } = require('../modules/db-connection');
+const { query, jobComplete } = require('../modules/db-connection');
 
 let itemData = false;
 const TRADES_URL = 'https://escapefromtarkov.gamepedia.com/Barter_trades';
@@ -211,42 +211,32 @@ module.exports = async function() {
         data: [],
     };
 
-    const promise = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM item_data ORDER BY id', async (error, results) => {
-            if(error){
-                return reject(error);
+    try {
+        const results = await query('SELECT * FROM item_data ORDER BY id');
+        const translationResults = await query(`SELECT item_id, type, value FROM translations WHERE language_code = ?`, ['en']);
+        const returnData = {};
+        for(const result of results){
+            Reflect.deleteProperty(result, 'item_id');
+
+            const preparedData = {
+                ...result,
             }
 
-            connection.query(`SELECT item_id, type, value FROM translations WHERE language_code = ?`, ['en'], (translationQueryError, translationResults) => {
-                if(translationQueryError){
-                    return reject(translationQueryError);
-                }
-                const returnData = {};
-
-                for(const result of results){
-                    Reflect.deleteProperty(result, 'item_id');
-
-                    const preparedData = {
-                        ...result,
-                    }
-
-                    for(const translationResult of translationResults){
-                        if(translationResult.item_id !== result.id){
-                            continue;
-                        }
-
-                        preparedData[translationResult.type] = translationResult.value;
-                    }
-
-                    returnData[result.id] = preparedData;
+            for(const translationResult of translationResults){
+                if(translationResult.item_id !== result.id){
+                    continue;
                 }
 
-                return resolve(returnData);
-            });
-        });
-    });
+                preparedData[translationResult.type] = translationResult.value;
+            }
 
-    itemData = await promise;
+            returnData[result.id] = preparedData;
+        }
+
+        itemData = returnData;
+    } catch (error) {
+        return Promise.reject(error);
+    }
 
     // itemData = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'src', 'data', 'all-en.json')));
 

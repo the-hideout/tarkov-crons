@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const cloudflare = require('../modules/cloudflare');
-const { doQuery, jobComplete } = require('../modules/db-connection');
+const { query, jobComplete } = require('../modules/db-connection');
 
 module.exports = async () => {
     const aWeekAgo = new Date();
@@ -12,7 +12,7 @@ module.exports = async () => {
     aWeekAgo.setDate(aWeekAgo.getDate() - 7);
 
     console.time(`historical-price-query-items`);
-    const historicalPriceDataItemIds = await doQuery(`SELECT
+    const historicalPriceDataItemIds = await query(`SELECT
         item_id
     FROM
         price_data
@@ -30,7 +30,7 @@ module.exports = async () => {
         }
 
         console.time(`historical-price-query-${itemId}`);
-        const historicalPriceData = await doQuery(`SELECT
+        const historicalPriceData = await query(`SELECT
             item_id, price, timestamp
         FROM
             price_data

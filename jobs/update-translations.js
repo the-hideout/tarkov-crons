@@ -4,7 +4,7 @@ const path = require('path');
 const ttData = require('../modules/tt-data');
 const normalizeName = require('../modules/normalize-name');
 
-const {connection, jobComplete} = require('../modules/db-connection');
+const {query, jobComplete} = require('../modules/db-connection');
 
 const INSERT_KEYS = [
     'Name',
@@ -53,21 +53,12 @@ module.exports = async () => {
 
                 if(oldKey !== newKey && currentDestinations.includes(newKey)){
                     try {
-                        await new Promise((resolve, reject) => {
-                            connection.query(`INSERT INTO
-                            redirects
-                                (source, destination)
+                        await query(`
+                            INSERT INTO
+                                redirects (source, destination)
                             VALUES
-                                (?, ?)`, [oldKey, newKey], (error) => {
-                                    if (error) {
-                                        console.log(error);
-                                        reject(error);
-                                    }
-
-                                    resolve();
-                                }
-                            );
-                        });
+                                (?, ?)
+                        `, [oldKey, newKey]);
                     } catch (redirectInsertError){
                         console.error(redirectInsertError);
                     }
@@ -78,8 +69,8 @@ module.exports = async () => {
             console.log(`OLD: ${allTTItems[item._id][insertKey.toLowerCase()]}`);
             console.log(`NEW: ${item._props[insertKey].toString().trim()}`);
 
-            await new Promise((translationResolve, translationReject) => {
-                connection.query(`UPDATE
+            await query(`
+                UPDATE
                     translations
                 SET
                     value = ?
@@ -88,63 +79,48 @@ module.exports = async () => {
                 AND
                     language_code = ?
                 AND
-                    type = ?`, [item._props[insertKey].toString().trim(), item._id, 'en', insertKey.toLowerCase()], (error) => {
-                        if (error) {
-                            console.log(error);
-                            translationReject(error);
-                        }
-
-                        translationResolve();
-                    }
-                );
-            });
+                    type = ?
+            `, [item._props[insertKey].toString().trim(), item._id, 'en', insertKey.toLowerCase()]);
         }
     }
 
-    await new Promise((resolve, reject) => {
-        connection.query(`SELECT source, destination FROM redirects`, (error, results) => {
-                if (error) {
-                    console.log(error);
-                    reject(error);
-                }
+    try {
+        const results = await query(`SELECT source, destination FROM redirects`);
+        const sources = [];
+        const destinations = [];
 
-                const sources = [];
-                const destinations = [];
+        const redirects = results
+            .map(row => {
+                sources.push(row.source);
+                destinations.push(row.destination);
 
-                const redirects = results
-                    .map(row => {
-                        sources.push(row.source);
-                        destinations.push(row.destination);
-
-                        return [
-                            `/item/${row.source}`,
-                            `/item/${row.destination}`,
-                        ];
-                    })
-                    .filter(Boolean);
+                return [
+                    `/item/${row.source}`,
+                    `/item/${row.destination}`,
+                ];
+            })
+            .filter(Boolean);
 
 
-                for(const source of sources){
-                    if(!currentDestinations.includes(source)){
-                        continue;
-                    }
-
-                    console.log(`${source} is not a valid source`);
-                }
-
-                for(const source of sources){
-                    if(!destinations.includes(source)){
-                        continue;
-                    }
-
-                    console.log(`${source} is both a source and a destination`);
-                }
-
-                fs.writeFileSync(path.join(__dirname, '..', 'public', 'data', 'redirects.json'), JSON.stringify(Object.fromEntries(redirects), null, 4));
-
-                resolve();
+        for(const source of sources){
+            if(!currentDestinations.includes(source)){
+                continue;
             }
-        );
-    });
+
+            console.log(`${source} is not a valid source`);
+        }
+
+        for(const source of sources){
+            if(!destinations.includes(source)){
+                continue;
+            }
+
+            console.log(`${source} is both a source and a destination`);
+        }
+
+        fs.writeFileSync(path.join(__dirname, '..', 'public', 'data', 'redirects.json'), JSON.stringify(Object.fromEntries(redirects), null, 4));
+    } catch (error) {
+        return Promise.reject(error);
+    }
     await jobComplete();
 };
