@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { doQuery, jobComplete } = require('../modules/db-connection');
+const { query, jobComplete } = require('../modules/db-connection');
 
 const keys = {
     interchange: {
@@ -101,7 +101,7 @@ const keys = {
 module.exports = async () => {
     for(const map in keys){
         console.time(`longtime-price-query-${map}`);
-        let historicalPriceData = await doQuery(`SELECT
+        let historicalPriceData = await query(`SELECT
             item_id, price, timestamp
         FROM
             price_data
@@ -134,18 +134,30 @@ module.exports = async () => {
         }
 
         fileHandle.end();
-
-        historicalPriceData = null;
-        mapPriceData = null;
     }
 
     console.time(`longtime-price-query-all`);
-    let historicalPriceData = await doQuery(`SELECT
-        item_id, price, timestamp
-    FROM
-        price_data
-    WHERE
-        timestamp > '2021-12-14'`);
+    const batchSize = 100000;
+    let offset = 0;
+    const priceSql = `
+        SELECT
+            item_id, price, timestamp
+        FROM
+            price_data
+        WHERE
+            timestamp > '2021-12-14'
+        LIMIT ?, 100000
+    `;
+    const historicalPriceData = await query(priceSql, [offset]);
+    let moreResults = historicalPriceData.length === 100000;
+    while (moreResults) {
+        offset += batchSize;
+        const moreData = await query(priceSql, [offset]);
+        historicalPriceData.push(...moreData);
+        if (moreData.length < batchSize) {
+            moreResults = false;
+        }
+    }
     console.timeEnd(`longtime-price-query-all`);
 
     const fileHandle = fs.createWriteStream(path.join(__dirname, '..', 'public', 'data', `historical-prices-all.csv`), {
@@ -161,9 +173,6 @@ module.exports = async () => {
 
     fileHandle.end();
     console.timeEnd('write-all-file');
-
-    historicalPriceData = null;
-    mapPriceData = null;
 
     await jobComplete();
 };

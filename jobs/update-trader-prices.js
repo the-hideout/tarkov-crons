@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const cloudflare = require('../modules/cloudflare');
-const { doQuery, jobComplete } = require('../modules/db-connection');
+const { query, jobComplete } = require('../modules/db-connection');
 const moment = require('moment');
 
 const outputPrices = async (prices) => {
@@ -22,7 +22,7 @@ const outputPrices = async (prices) => {
 
 module.exports = async () => {
     const outputData = {};
-    const junkboxLastScan = await doQuery(`
+    const junkboxLastScan = await query(`
         SELECT
             trader_price_data.*
         FROM
@@ -59,7 +59,7 @@ module.exports = async () => {
     const currenciesThen = {
         'RUB': 1
     };
-    const currenciesLastScan = await doQuery(`
+    const currenciesLastScan = await query(`
         SELECT
             item_id, trader_name, currency, min_level, quest_unlock_id,
             price, trader_items.timestamp as offer_timestamp, trader_price_data.timestamp as price_timestamp
@@ -85,7 +85,7 @@ module.exports = async () => {
     for (const curr of currenciesLastScan) {
         currenciesNow[currencyISO[curr.item_id]] = curr.price;
     }
-    const currenciesHistoricScan = await doQuery(`
+    const currenciesHistoricScan = await query(`
         SELECT
             item_id, trader_name, currency, min_level, quest_unlock_id,
             price, trader_items.timestamp as offer_timestamp, trader_price_data.timestamp as price_timestamp
@@ -112,12 +112,12 @@ module.exports = async () => {
         currenciesThen[currencyISO[curr.item_id]] = curr.price;
     }
 
-    const traderItems = await doQuery(`SELECT
+    const traderItems = await query(`SELECT
         *
     FROM
         trader_items;`);
 
-    const traderPriceData = await doQuery(`SELECT
+    const traderPriceData = await query(`SELECT
         *
     FROM
         trader_price_data

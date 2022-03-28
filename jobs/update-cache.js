@@ -5,14 +5,14 @@ const roundTo = require('round-to');
 
 const cloudflare = require('../modules/cloudflare');
 const remoteData = require('../modules/remote-data');
-const { doQuery, jobComplete } = require('../modules/db-connection');
+const { query, jobComplete } = require('../modules/db-connection');
 
 module.exports = async () => {
     const itemMap = await remoteData.get();
     const itemData = {};
 
     console.time('price-yesterday-query');
-    const avgPriceYesterday = await doQuery(`SELECT
+    const avgPriceYesterday = await query(`SELECT
         avg(price) AS priceYesterday,
         item_id
     FROM
@@ -26,7 +26,7 @@ module.exports = async () => {
     console.timeEnd('price-yesterday-query');
 
     console.time('last-low-price-query');
-    const lastKnownPriceData = await doQuery(`SELECT
+    const lastKnownPriceData = await query(`SELECT
         price,
         a.timestamp,
         a.item_id
@@ -50,7 +50,7 @@ module.exports = async () => {
     console.timeEnd('last-low-price-query');
 
     console.time('contained-items-query');
-    const containedItems = await doQuery(`SELECT
+    const containedItems = await query(`SELECT
         *
     FROM
         item_children;`);

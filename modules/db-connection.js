@@ -16,30 +16,18 @@ pool.keepAlive = false;
 
 module.exports = {
     connection: pool,
-    doQuery: async (query, params) => {
-        let responseData;
-        const promise = new Promise((resolve, reject) => {
-            pool.query(query,
-                params
-                , async (error, results) => {
-                    if (error) {
-                        reject(error)
-                    }
-
-                    resolve(results);
+    pool: pool,
+    query: async (query, params) => {
+        return new Promise((resolve, reject) => {
+            pool.query(query, params, async (error, results) => {
+                if (error) {
+                    console.error(error);
+                    reject(error)
                 }
-            );
+
+                resolve(results);
+            });
         });
-
-        try {
-            responseData = await promise;
-        } catch (upsertError){
-            console.error(upsertError);
-
-            throw upsertError;
-        }
-
-        return responseData;
     },
     jobComplete: async () => {
         if (pool.keepAlive) {

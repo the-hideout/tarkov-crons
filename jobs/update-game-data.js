@@ -9,7 +9,7 @@ const presetSize = require('../modules/preset-size');
 const ttData = require('../modules/tt-data');
 const oldShortnames = require('../old-shortnames.json');
 
-const { connection, jobComplete } = require('../modules/db-connection');
+const { connection, query, jobComplete } = require('../modules/db-connection');
 
 let bsgData;
 
@@ -222,22 +222,22 @@ module.exports = async () => {
             shouldUpsert = false;
         }
 
-        if(allTTItems[item._id] && allTTItems[item._id].basePrice !== item._props.CreditsPrice){
-            spinner.warn(`${allTTItems[item._id].name} has the wrong basePrice. is ${allTTItems[item._id].basePrice} should be ${item._props.CreditsPrice}`);
+        if(allTTItems[item._id] && allTTItems[item._id].basePrice !== item._props.CreditsPrice && typeof item._props.CreditsPrice !== 'undefined'){
+            spinner.info(`${allTTItems[item._id].name} has the wrong basePrice. is ${allTTItems[item._id].basePrice} should be ${item._props.CreditsPrice}`);
             spinner.start();
 
             shouldUpsert = true;
         }
 
         if(allTTItems[item._id] && allTTItems[item._id].width !== item.width){
-            spinner.warn(`${allTTItems[item._id].name} has a new width ${item.width}`);
+            spinner.info(`${allTTItems[item._id].name} has a new width ${item.width}`);
             spinner.start();
 
             shouldUpsert = true;
         }
 
         if(allTTItems[item._id] && allTTItems[item._id].height !== item.height){
-            spinner.warn(`${allTTItems[item._id].name} has a new height ${item.height}`);
+            spinner.info(`${allTTItems[item._id].name} has a new height ${item.height}`);
             spinner.start();
 
             shouldUpsert = true;
@@ -251,75 +251,50 @@ module.exports = async () => {
             continue;
         }
 
-        spinner.succeed(`Upserting item: ${item.name}`);
-        const promise = new Promise((resolve, reject) => {
-            connection.query(`INSERT INTO item_data (id, normalized_name, base_price, width, height, properties)
+        try {
+            let basePrice = item._props.CreditsPrice;
+            if (typeof basePrice === 'undefined') {
+                basePrice = allTTItems[item._id].basePrice;
+            }
+            const results = await query(`
+                INSERT INTO 
+                    item_data (id, normalized_name, base_price, width, height, properties)
                 VALUES (
                     '${item._id}',
                     ${connection.escape(normalizeName(item._props.Name))},
-                    ${item._props.CreditsPrice},
+                    ${basePrice},
                     ${item.width},
                     ${item.height},
                     ${connection.escape(JSON.stringify(extraProperties))}
                 )
                 ON DUPLICATE KEY UPDATE
                     normalized_name=${connection.escape(normalizeName(item._props.Name))},
-                    base_price=${item._props.CreditsPrice},
+                    base_price=${basePrice},
                     width=${item.width},
                     height=${item.height},
-                    properties=${connection.escape(JSON.stringify(extraProperties))}`
-                , async (error, results) => {
-                    if (error) {
-                        reject(error)
-                    }
+                    properties=${connection.escape(JSON.stringify(extraProperties))}
+            `);
+            if(results.changedRows > 0){
+                console.log(`${item._props.Name} updated`);
+            }
 
-                    if(results.changedRows > 0){
-                        console.log(`${item._props.Name} updated`);
-                    }
+            if(results.insertId !== 0){
+                console.log(`${item._props.Name} added`);
+            }
 
-                    if(results.insertId !== 0){
-                        console.log(`${item._props.Name} added`);
-                    }
-
-                    for(const insertKey of INSERT_KEYS){
-                        const promise = new Promise((translationResolve, translationReject) => {
-                            connection.query(`INSERT IGNORE INTO translations (item_id, type, language_code, value)
-                                VALUES (
-                                    ?,
-                                    ?,
-                                    ?,
-                                    ?
-                                )`, [item._id, insertKey.toLowerCase(), 'en', item[insertKey].trim()], (error) => {
-                                    if (error) {
-                                        translationReject(error);
-                                    }
-
-                                    translationResolve();
-                                }
-                            );
-                        });
-
-                        try {
-                            await promise;
-                        } catch (upsertError){
-                            console.error(upsertError);
-
-                            throw upsertError;
-                        }
-
-                    }
-
-                    resolve();
-                }
-            );
-        });
-
-        try {
-            await promise;
-        } catch (upsertError){
-            console.error(upsertError);
-
-            throw upsertError;
+            for(const insertKey of INSERT_KEYS){
+                await query(`
+                    INSERT IGNORE INTO 
+                        translations (item_id, type, language_code, value)
+                    VALUES (?, ?, ?, ?)
+                `, [item._id, insertKey.toLowerCase(), 'en', item[insertKey].trim()]);
+            }
+            //spinner.succeed(`Updated item: ${item.name}`);
+        } catch (error){
+            spinner.fail(`${allTTItems[item._id].name} error updating item`);
+            spinner.start();
+            console.error(error);
+            return Promise.reject(error);
         }
     }
 
@@ -332,6 +307,6 @@ module.exports = async () => {
         spinner.start();
     }
 
-    spinner.stop();
+    spinner.succeed('Game data update complete');
     await jobComplete();
 };
