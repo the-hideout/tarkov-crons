@@ -222,22 +222,22 @@ module.exports = async () => {
             shouldUpsert = false;
         }
 
-        if(allTTItems[item._id] && allTTItems[item._id].basePrice !== item._props.CreditsPrice){
-            spinner.warn(`${allTTItems[item._id].name} has the wrong basePrice. is ${allTTItems[item._id].basePrice} should be ${item._props.CreditsPrice}`);
+        if(allTTItems[item._id] && allTTItems[item._id].basePrice !== item._props.CreditsPrice && typeof item._props.CreditsPrice !== 'undefined'){
+            spinner.info(`${allTTItems[item._id].name} has the wrong basePrice. is ${allTTItems[item._id].basePrice} should be ${item._props.CreditsPrice}`);
             spinner.start();
 
             shouldUpsert = true;
         }
 
         if(allTTItems[item._id] && allTTItems[item._id].width !== item.width){
-            spinner.warn(`${allTTItems[item._id].name} has a new width ${item.width}`);
+            spinner.info(`${allTTItems[item._id].name} has a new width ${item.width}`);
             spinner.start();
 
             shouldUpsert = true;
         }
 
         if(allTTItems[item._id] && allTTItems[item._id].height !== item.height){
-            spinner.warn(`${allTTItems[item._id].name} has a new height ${item.height}`);
+            spinner.info(`${allTTItems[item._id].name} has a new height ${item.height}`);
             spinner.start();
 
             shouldUpsert = true;
@@ -251,22 +251,25 @@ module.exports = async () => {
             continue;
         }
 
-        spinner.succeed(`Upserting item: ${item.name}`);
         try {
+            let basePrice = item._props.CreditsPrice;
+            if (typeof basePrice === 'undefined') {
+                basePrice = allTTItems[item._id].basePrice;
+            }
             const results = await query(`
                 INSERT INTO 
                     item_data (id, normalized_name, base_price, width, height, properties)
                 VALUES (
                     '${item._id}',
                     ${connection.escape(normalizeName(item._props.Name))},
-                    ${item._props.CreditsPrice},
+                    ${basePrice},
                     ${item.width},
                     ${item.height},
                     ${connection.escape(JSON.stringify(extraProperties))}
                 )
                 ON DUPLICATE KEY UPDATE
                     normalized_name=${connection.escape(normalizeName(item._props.Name))},
-                    base_price=${item._props.CreditsPrice},
+                    base_price=${basePrice},
                     width=${item.width},
                     height=${item.height},
                     properties=${connection.escape(JSON.stringify(extraProperties))}
@@ -286,7 +289,10 @@ module.exports = async () => {
                     VALUES (?, ?, ?, ?)
                 `, [item._id, insertKey.toLowerCase(), 'en', item[insertKey].trim()]);
             }
+            //spinner.succeed(`Updated item: ${item.name}`);
         } catch (error){
+            spinner.fail(`${allTTItems[item._id].name} error updating item`);
+            spinner.start();
             console.error(error);
             return Promise.reject(error);
         }
@@ -301,6 +307,6 @@ module.exports = async () => {
         spinner.start();
     }
 
-    spinner.stop();
+    spinner.succeed('Game data update complete');
     await jobComplete();
 };

@@ -29,7 +29,7 @@ module.exports = async () => {
             allPriceData[itemId] = [];
         }
 
-        console.time(`historical-price-query-${itemId}`);
+        //console.time(`historical-price-query-${itemId}`);
         const historicalPriceData = await query(`SELECT
             item_id, price, timestamp
         FROM
@@ -38,7 +38,7 @@ module.exports = async () => {
             timestamp > ?
         AND
             item_id = ?`, [aWeekAgo, itemId]);
-        console.timeEnd(`historical-price-query-${itemId}`);
+        //console.timeEnd(`historical-price-query-${itemId}`);
         for (const row of historicalPriceData) {
             if(!allPriceData[row.item_id][row.timestamp.getTime()]){
                 allPriceData[row.item_id][row.timestamp.getTime()] = {

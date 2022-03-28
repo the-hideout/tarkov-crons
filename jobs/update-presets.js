@@ -1,9 +1,11 @@
 const got = require('got');
+const ora = require('ora');
 
 const {query, jobComplete} = require('../modules/db-connection');
 
 module.exports = async () => {
     let presets;
+    const spinner = ora('Updating presets').start();
     try {
         // const response = await got('https://dev.sp-tarkov.com/SPT-AKI/Server/raw/branch/development/project/assets/database/globals.json', {
         //     responseType: 'json',
@@ -23,12 +25,11 @@ module.exports = async () => {
         if(!presets[presetId].default){
             continue;
         }
-
         let i = 0;
         for(const item of presets[presetId].parts){
             i = i + 1;
 
-            console.log(`Adding item ${i}/${presets[presetId].parts.length} for ${presets[presetId].name}`);
+            spinner.start(`Adding item ${i}/${presets[presetId].parts.length} for ${presets[presetId].name}`);
 
             // Skip the "container item"
             if(item.id === presets[presetId].baseId){
@@ -41,8 +42,9 @@ module.exports = async () => {
                 VALUES (?, ?, ?)
             `, [presets[presetId].baseId, item.id, 1]);
         }
+        spinner.succeed(`Completed ${presets[presetId].name} preset (${presets[presetId].parts.length} parts)`);
     }
 
-    console.log('Done with all presets');
+    spinner.succeed('Done with all presets');
     await jobComplete();
 };

@@ -3,3 +3,5 @@ node_modules
 dumps/*
 !.gitkeep
 test-tm.js
+bsg-data.json
+public/data/*
