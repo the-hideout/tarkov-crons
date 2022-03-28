@@ -44,15 +44,14 @@ module.exports = async () => {
         }];
     }
 
-    fs.writeFileSync(path.join(__dirname, '..', 'dumps', 'currency-prices.json'), JSON.stringify(outputData, null, 4));
+    //fs.writeFileSync(path.join(__dirname, '..', 'dumps', 'currency-prices.json'), JSON.stringify(outputData, null, 4));
 
-    // the following needs to be un-commented out; not sure of the proper endpoint
-    /*try {
+    try {
         const response = await cloudflare(`/values/CURRENCY_PRICES`, 'PUT', JSON.stringify(outputData));
         console.log(response);
     } catch (requestError){
         console.error(requestError);
-    }*/
+    }
 
     // Possibility to POST to a Discord webhook here with cron status details
     console.log(`Process completed`);
