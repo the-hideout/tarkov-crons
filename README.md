@@ -12,7 +12,7 @@ These cronjobs run in GitHub actions and their schedules can be found in the sec
 
 |  Name  |  Cron  |  Status  |
 |---|---|---|
-| update-cache  | `*/20 * * * *`  | [![update-cache](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-cache.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-cache.yml) |
+| update-cache  | `*/5 * * * *`  | [![update-cache](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-cache.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-cache.yml) |
 | update-reset-timers  | `*/5 * * * *`  | [![update-reset-timers](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-reset-timers.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-reset-timers.yml) |
 | update-barters |`*/20 * * * *` | [![update-barters](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-barters.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-barters.yml) |
 | update-crafts | `*/20 * * * *` | [![update-crafts](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-crafts.yml/badge.svg)](https://github.com/the-hideout/tarkov-crons/actions/workflows/update-crafts.yml) |
