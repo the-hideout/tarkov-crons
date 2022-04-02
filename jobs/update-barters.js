@@ -13,7 +13,9 @@ const { query, jobComplete } = require('../modules/db-connection');
 
 let itemData = false;
 const TRADES_URL = 'https://escapefromtarkov.gamepedia.com/Barter_trades';
+let spinner;
 let trades;
+let tasks;
 let $;
 
 const getItemByName = (searchName) => {
@@ -130,10 +132,12 @@ const parseTradeRow = (tradeElement) => {
     const rewardItem = getItemByName(rewardItemName);
 
     if(!rewardItem){
-        console.log(`Found no item called "${rewardItemName}"`);
+        //console.log(`Found no item called "${rewardItemName}"`);
+        spinner.fail(`Found no item called "${rewardItemName}"`);
 
         return true;
     }
+    spinner.start(`Parsing ${rewardItem.name} (${traderRequirement})`);
 
     const tradeData = {
         requiredItems: [],
@@ -143,7 +147,35 @@ const parseTradeRow = (tradeElement) => {
             count: 1,
         }],
         trader: traderRequirement,
+        requirements: [],
+        sourceName: fixName($trade.find('th').eq(2).find('a').eq(0).prop('title')).toLowerCase()
     };
+    const loyaltyLevelMatch = traderRequirement.match(/ LL(\d)/);
+    if (loyaltyLevelMatch) {
+        tradeData.requirements.push({
+            type: 'loyaltyLevel',
+            value: loyaltyLevelMatch[1]
+        });
+    }
+    if ($trade.find('th').eq(2).find('a').length > 2 && $trade.find('th').eq(2).text().includes('task')) {
+        const taskUrl = $trade.find('th').eq(2).find('a').eq(2).prop('href');
+        const taskName = $trade.find('th').eq(2).find('a').eq(2).prop('title');
+        for (const i in tasks) {
+            const task = tasks[i];
+            if (task.wiki.endsWith(taskUrl)) {
+                tradeData.requirements.push({
+                    type: 'questCompleted',
+                    value: task.id
+                });
+                //console.log(`Matched quest ${taskName}: ${task.title} (${task.id})`);
+                break;
+            }
+            if (taskName == task.title) {
+                spinner.warn(`Found potential quest match for ${taskName}: ${task.title} (${task.id})`);
+                spinner.warn(`${taskUrl} != ${task.wiki}`);
+            }
+        }
+    }
 
     let items = $trade.find('th').eq(0).html().split(/<br>\s?\+\s?<br>/);
     const itemCountMatches = $trade.find('th').eq(0).text().match(/\sx\d/gm) || ['x1'];
@@ -221,20 +253,24 @@ const parseTradeRow = (tradeElement) => {
 }
 
 module.exports = async function() {
-    const response = await got(TRADES_URL);
-    $ = cheerio.load(response.body);
-    trades = {
-        updated: new Date(),
-        data: [],
-    };
-
-    const spinner = ora('Retrieving items from db...').start();
+    spinner = ora('Retrieving barters data...').start();
     try {
         const itemsPromise = query('SELECT * FROM item_data ORDER BY id');
         const translationsPromise = query(`SELECT item_id, type, value FROM translations WHERE language_code = ?`, ['en']);
-        const allResults = await Promise.all([itemsPromise, translationsPromise]);
+        const wikiPromise = got(TRADES_URL);
+        const tasksPromise = got('https://raw.githubusercontent.com/TarkovTracker/tarkovdata/master/quests.json', {
+            responseType: 'json',
+        });
+        const allResults = await Promise.all([itemsPromise, translationsPromise, wikiPromise, tasksPromise]);
         const results = allResults[0];
         const translationResults = allResults[1];
+        const response = allResults[2];
+        tasks = allResults[3].body;
+        $ = cheerio.load(response.body);
+        trades = {
+            updated: new Date(),
+            data: [],
+        };
         const returnData = {};
         for(const result of results){
             Reflect.deleteProperty(result, 'item_id');
@@ -258,7 +294,7 @@ module.exports = async function() {
     } catch (error) {
         return Promise.reject(error);
     }
-    spinner.succeed('Items retrieved from db');
+    spinner.succeed('Barters data retrieved');
     // itemData = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'src', 'data', 'all-en.json')));
 
     const traderRows = [];
