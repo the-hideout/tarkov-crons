@@ -3,6 +3,7 @@ const path = require('path');
 
 const got = require('got');
 const cheerio = require('cheerio');
+const ora = require('ora');
 
 const cloudflare = require('../modules/cloudflare');
 const oldNames = require('../old-names.json');
@@ -91,6 +92,19 @@ const getItemData = function getItemData(html){
         return false;
     }
 
+    if (!item.attributes) item.attributes = [];
+
+    if (item.name === 'Dogtag') {
+        let dogtagName = fixName($local('a').eq(-1).text());
+        let minLevelMatch = dogtagName.match(/ ≥ Lvl (\d+)/);
+        if (minLevelMatch) {
+            item.attributes.push({
+                type: 'minLevel',
+                value: minLevelMatch[1]
+            });
+        }
+    }
+
     let count = 1;
 
     // Strip the links
@@ -105,6 +119,7 @@ const getItemData = function getItemData(html){
         name: item.name,
         id: item.id,
         count: count,
+        attributes: item.attributes
     };
 };
 
@@ -176,6 +191,7 @@ const parseTradeRow = (tradeElement) => {
                 name: 'Dogtag USEC',
                 id: dogtagUSEC.id,
                 count: requiredItem.count,
+                attributes: requiredItem.attributes
             };
         });
 
@@ -192,6 +208,7 @@ const parseTradeRow = (tradeElement) => {
                 name: 'Dogtag BEAR',
                 id: dogtagBEAR.id,
                 count: requiredItem.count,
+                attributes: requiredItem.attributes
             };
         });
 
@@ -211,9 +228,13 @@ module.exports = async function() {
         data: [],
     };
 
+    const spinner = ora('Retrieving items from db...').start();
     try {
-        const results = await query('SELECT * FROM item_data ORDER BY id');
-        const translationResults = await query(`SELECT item_id, type, value FROM translations WHERE language_code = ?`, ['en']);
+        const itemsPromise = query('SELECT * FROM item_data ORDER BY id');
+        const translationsPromise = query(`SELECT item_id, type, value FROM translations WHERE language_code = ?`, ['en']);
+        const allResults = await Promise.all([itemsPromise, translationsPromise]);
+        const results = allResults[0];
+        const translationResults = allResults[1];
         const returnData = {};
         for(const result of results){
             Reflect.deleteProperty(result, 'item_id');
@@ -237,7 +258,7 @@ module.exports = async function() {
     } catch (error) {
         return Promise.reject(error);
     }
-
+    spinner.succeed('Items retrieved from db');
     // itemData = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'src', 'data', 'all-en.json')));
 
     const traderRows = [];
@@ -254,8 +275,9 @@ module.exports = async function() {
             });
     });
 
+    spinner.start('Parsing barters table...');
     traderRows.map(parseTradeRow);
-
+    spinner.succeed('Finished parsing barters table');
     try {
         const response = await cloudflare(`/values/BARTER_DATA`, 'PUT', JSON.stringify(trades));
         console.log(response);
