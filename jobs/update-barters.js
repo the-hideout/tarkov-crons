@@ -147,7 +147,8 @@ const parseTradeRow = (tradeElement) => {
             count: 1,
         }],
         trader: traderRequirement,
-        requirements: []
+        requirements: [],
+        sourceName: fixName($trade.find('th').eq(2).find('a').eq(0).prop('title')).toLowerCase()
     };
     const loyaltyLevelMatch = traderRequirement.match(/ LL(\d)/);
     if (loyaltyLevelMatch) {
