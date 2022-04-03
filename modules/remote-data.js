@@ -190,6 +190,7 @@ const methods = {
                     traderPrices: [],
                     lastLowPrice: itemPrices[result.id]?.lastLowPrice,
                 };
+                if (preparedData.types.includes('disabled')) continue;
 
                 // Add all translations
                 for(const translationResult of translationResults){
