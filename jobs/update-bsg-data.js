@@ -3,6 +3,8 @@ const path = require('path');
 
 const got = require('got');
 
+const bitcoinPrice = require('../modules/bitcoin-price');
+
 module.exports = async () => {
     let itemData;
 
@@ -50,7 +52,19 @@ module.exports = async () => {
         console.timeEnd('bsg-base-price-data');
 
         for(const key in itemData){
-            if(!itemData[key]._props){
+            if (key === '59faff1d86f7746c51718c9c') {
+                //bitcoin
+                try {
+                    itemData[key]._props = {
+                        ...itemData[key]._props,
+                        CreditsPrice: await bitcoinPrice()
+                    };
+                } catch (error) {
+                    console.log('Error setting bitcoin price', error);
+                }
+                continue;
+            }
+            if (!itemData[key]._props){
                 continue;
             }
 
