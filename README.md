@@ -1,5 +1,9 @@
 # tarkov-crons ⏰
 
+> ARCHIVE NOTICE
+
+⚠️ **This repo is now archived. Rather than running our crons in GitHub Actions, we are running them in the [Tarkov Data Manager](https://github.com/the-hideout/tarkov-data-manager). We are doing this because GitHub Actions does not allow us to run our crons as frequently as we would like. For the configurations of our current crons, please check out the following repo: [Tarkov Data Manager](https://github.com/the-hideout/tarkov-data-manager)** ⚠️
+
 cronjobs to manage the Tarkov mysql database. The cronjobs are essentially forked from the cronjobs in kokarn's tarkov-data-manager.
 
 ## About 💡
